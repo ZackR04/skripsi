@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
-import 'package:steps_indicator/steps_indicator.dart';
+
 
 class DetailReportScreen extends StatefulWidget {
 
@@ -17,118 +17,93 @@ class DetailReportScreen extends StatefulWidget {
 
 class _DetailReportScreenState extends State<DetailReportScreen> {
 
-  List _listDetailReport = [
+  final List _listDetailReport = [
     {
-      'id' : 0,
-      'report' : 'Report Diterima',
+      'icon' : Icons.watch_later_rounded,
+      'title_activity' : 'Activity 1',
+      'subtitle_activity' : 'sub activity 1',
+      'deskripsi' : 'Deskripsi Activity Satu'
     },
     {
-      'id' : 1,
-      'report' : 'Petugas mulai memperbaiki jalan',
-    }
+      'icon' : Icons.watch_later_rounded,
+      'title_activity' : 'Activity 2',
+      'subtitle_activity' : 'sub activity 2',
+      'deskripsi' : 'Deskripsi Activity Dua'
+    },
+    {
+      'icon' : Icons.watch_later_rounded,
+      'title_activity' : 'Activity 3',
+      'subtitle_activity' : 'sub activity 3',
+      'deskripsi' : 'Deskripsi Activity Tiga'
+    },
+    {
+      'icon' : Icons.watch_later_rounded,
+      'title_activity' : 'Activity 4',
+      'subtitle_activity' : 'sub activity 4',
+      'deskripsi' : 'Deskripsi Activity Empat'
+    },
+    {
+      'icon' : Icons.watch_later_rounded,
+      'title_activity' : 'Activity 5',
+      'subtitle_activity' : 'sub activity 5',
+      'deskripsi' : 'Deskripsi Activity Lima'
+    },
   ];
+
+  StepperType _type = StepperType.vertical;
+  int _index = 0;
+
 
   @override
   Widget build(BuildContext context) {
+    var heightofContext = MediaQuery.of(context).size.height-450;
+    print(heightofContext);
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: [
-                Container(
-                  height: 250,
-                  child: widget.gambar,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blue.shade100
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  Container(
+                    height: 250,
+                    child: widget.gambar,
                   ),
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                        widget.waktureport!,
-                        style: TextStyle(
-                            color: Colors.black38)),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blue.shade100
-                  ),
-                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                  child: Text(
-                      widget.deskripsireport!,
-                      style: TextStyle(fontSize: 16)),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text("Detail Maintenance",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF5d5e5e))),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10),
-                        ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                             Expanded(
-                               child: Align(
-                                 alignment: Alignment.topLeft,
-                                 child: StepsIndicator(
-                                   selectedStep: 0,
-                                   nbSteps: 5,
-                                   doneLineColor: Colors.grey,
-                                   doneStepColor: Colors.grey,
-                                   undoneLineColor: Colors.grey,
-                                   unselectedStepColorIn: Colors.grey,
-                                   unselectedStepColorOut: Colors.grey,
-                                   selectedStepSize: 15,
-                                   lineLength: 60,
-                                   enableLineAnimation: true,
-                                   enableStepAnimation: true,
-                                   isHorizontal: false,
-                                 ),
-                               ),
-                             ),
-                              Expanded(
-                                  child: ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: _listDetailReport.length,
-                                    itemBuilder: (context, int index){
-                                      return Container(
-                                        child: Text(_listDetailReport[index]['report']),
-                                      );
-                                    },
-                                  )
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                  Padding(padding: EdgeInsets.only(top: 10),),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.blue.shade100
+                    ),
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                          widget.waktureport!,
+                          style: TextStyle(
+                              color: Colors.black38)),
                     ),
                   ),
-                )
-              ],
-            )
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.blue.shade100
+                    ),
+                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    child: Text(
+                        widget.deskripsireport!,
+                        style: TextStyle(fontSize: 16)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                  ),
+                  Expanded(
+                    child:
+                    buildStepper(context)
+                  ),
+                ],
+              )
+          ),
         ),
       ),
     );
@@ -142,5 +117,93 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
           fontWeight: FontWeight.bold,
           color: Colors.black54),
     );
+  }
+
+  void next(){
+    if (_index < _listDetailReport.length-1) {
+      setState(() {
+        _index++;
+      });
+      return;
+    }
+  }
+
+  void back(){
+    if (_index > 0) {
+      setState(() {
+        _index--;
+      });
+      return;
+    }
+  }
+
+
+  Widget buildStepper(BuildContext context) {
+    return EnhanceStepper(
+        type: _type,
+        currentStep: _index,
+        physics: ClampingScrollPhysics(),
+        steps: _listDetailReport.map((e) =>
+            EnhanceStep(
+              icon: Icon(
+                _index == _listDetailReport.indexOf(e) ? _listDetailReport[_listDetailReport.indexOf(e)]['icon'] : Icons.adjust_rounded,
+                color: _index == _listDetailReport.indexOf(e) ? Colors.blue : Colors.grey,
+              ),
+              isActive: _index == _listDetailReport.indexOf(e),
+              title: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['title_activity']}"),
+              subtitle: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['subtitle_activity']}"),
+              content: Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['deskripsi']}", textAlign: TextAlign.left)
+                    ),
+                  )
+                ],
+              )
+            )
+        ).toList(),
+        onStepCancel: () {
+          back();
+        },
+        onStepContinue: () {
+          next();
+        },
+        onStepTapped: (index) {
+          setState(() {
+            _index = index;
+          });
+        },
+        controlsBuilder: (BuildContext context, ControlsDetails details) {
+          return Container(
+            padding: EdgeInsets.only(top: 30),
+            child: Row(
+              children: [
+                SizedBox(
+                  height: 30,
+                ),
+                _index < _listDetailReport.length-1
+                    ?
+                TextButton(
+                  onPressed: details.onStepContinue,
+                  child: Text("Next"),
+                )
+                    :
+                SizedBox(
+                  width: 8,
+                ),
+                _index == 0
+                    ?
+                Container()
+                    :
+                TextButton(
+                  onPressed: details.onStepCancel,
+                  child: Text("Back", style: TextStyle(color: Colors.red),),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
