@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 
-class ItemListReportScreen extends StatefulWidget {
+class ItemSelesaiScreen extends StatefulWidget {
+
   final Image gambar;
   final String detailreport;
-  final String waktureport;
+  final int waktureport;
+  final double rating;
   final Function()? onclick;
 
-
-  const ItemListReportScreen(
-        {Key? key,
-          required this.gambar,
-          required this.detailreport,
-          required this.waktureport,
-          this.onclick})
-          : super (key: key);
+  const ItemSelesaiScreen({Key? key,
+    required this.gambar,
+    required this.detailreport,
+    required this.waktureport,
+    required this.rating,
+    this.onclick})
+      : super(key: key);
 
   @override
-  _ItemListReportScreenState createState() => _ItemListReportScreenState();
+  _ItemSelesaiScreenState createState() => _ItemSelesaiScreenState();
 }
 
-class _ItemListReportScreenState extends State<ItemListReportScreen> {
+class _ItemSelesaiScreenState extends State<ItemSelesaiScreen> {
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -47,6 +50,22 @@ class _ItemListReportScreenState extends State<ItemListReportScreen> {
               child: Container(
                 child: Column(
                   children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: RatingStars(
+                        value: widget.rating,
+                        starBuilder: (index, color) => Icon(
+                          Icons.star,
+                          color: color,
+                        ),
+                        starCount: 5,
+                        starSize: 20,
+                        starSpacing: 2,
+                        valueLabelVisibility: false,
+                        starColor: Colors.yellow,
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10)),
                     Expanded(
                       child: RichText(
                         maxLines: 5,
@@ -63,7 +82,7 @@ class _ItemListReportScreenState extends State<ItemListReportScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Text("${widget.waktureport}",
+                      child: Text("Selesai dalam ${widget.waktureport} hari",
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black54

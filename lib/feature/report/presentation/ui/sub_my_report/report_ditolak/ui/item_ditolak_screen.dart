@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 
-class ItemListReportScreen extends StatefulWidget {
+class ItemDitolakScreen extends StatefulWidget {
+
   final Image gambar;
   final String detailreport;
   final String waktureport;
+  final String noteditolak;
   final Function()? onclick;
 
 
-  const ItemListReportScreen(
-        {Key? key,
-          required this.gambar,
-          required this.detailreport,
-          required this.waktureport,
-          this.onclick})
-          : super (key: key);
+  const ItemDitolakScreen(
+      {Key? key,
+        required this.gambar,
+        required this.detailreport,
+        required this.waktureport,
+        required this.noteditolak,
+        this.onclick, })
+      : super (key: key);
 
   @override
-  _ItemListReportScreenState createState() => _ItemListReportScreenState();
+  _ItemDitolakScreenState createState() => _ItemDitolakScreenState();
 }
 
-class _ItemListReportScreenState extends State<ItemListReportScreen> {
+class _ItemDitolakScreenState extends State<ItemDitolakScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -47,6 +50,15 @@ class _ItemListReportScreenState extends State<ItemListReportScreen> {
               child: Container(
                 child: Column(
                   children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("Ditolak",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.orange,
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: RichText(
                         maxLines: 5,
