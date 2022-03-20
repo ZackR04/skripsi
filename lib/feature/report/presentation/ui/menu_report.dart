@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_add_report/add_report_screen.dart';
 import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_my_report/my_report_screen.dart';
 import 'sub_report/list_report.dart';
 import 'package:steps_indicator/steps_indicator.dart';
@@ -102,7 +103,7 @@ class _MenuReportScreenState extends State<MenuReportScreen> {
                             child: FloatingActionButton(
                               child: Icon(Icons.add),
                               onPressed: (){
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => FormAddReportScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddReportScreen()));
                               },
                             ),
                           ),
