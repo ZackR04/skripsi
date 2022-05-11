@@ -20,13 +20,13 @@ class _ListContactServiceScreenState extends State<ListContactServiceScreen> {
       'id' : 0,
       'namaperusahaan' : 'PT. Bersih Jaya',
       'detailperusahaan' : 'Berlokasi di jalan Patimura No.23 perusahaan ini sudah berdiri sejak tahun 2012 dan melayani banyak pelanggan dengan...',
-      'nocontact' : '081260006443'
+      'nocontact' : '+6281260006443'
     },
     {
       'id' : 1,
       'namaperusahaan' : 'PT. Rapi Jaya',
       'detailperusahaan' : 'Berlokasi di jalan Patimura No.23 perusahaan ini sudah berdiri sejak tahun 2012 dan melayani banyak pelanggan dengan...',
-      'nocontact' : '082164436000'
+      'nocontact' : '+6282164436000'
     }
   ];
 

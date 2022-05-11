@@ -26,13 +26,17 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
       'id' : 0,
       'gambar' : 'assets/report.png',
       'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'waktureport' : 'Kemarin',
+      'tgl_publish' : '9 May 2022',
+      'latitude' : '-7.7946271',
+      'longitude' : '110.3925474'
     },
     {
       'id' : 1,
       'gambar' : 'assets/logo.png',
       'detailreport' : 'Saran. perlunya polisi tidur di area taman dikarenakan banyaknya anak-anak berlalu-lalang',
-      'waktureport' : '2 Hari lalu',
+      'tgl_publish' : '9 May 2022',
+      'latitude' : '-7.7946271',
+      'longitude' : '110.3925474'
     }
   ];
 
@@ -42,6 +46,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
       'gambar' : 'assets/report.png',
       'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
       'waktureport' : 'Kemarin',
+      'tgl_publish' : '9 May 2022',
     }
   ];
 
@@ -62,6 +67,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
       'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
       'waktureport' : 'Kemarin',
       'noteditolak' : 'Report anda ditolak dikarenakan alasan yang tidak kuat',
+      'tgl_publish' : '9 May 2022',
     }
   ];
 
@@ -77,18 +83,24 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemBuilder: (context, int index){
           final Image _image = Image.asset(_listItemDitinjau[index]['gambar']);
           final String _detailreport = _listItemDitinjau[index]['detailreport'];
-          final String _waktureport = _listItemDitinjau[index]['waktureport'];
+          final String _tglpublish = _listItemDitinjau[index]['tgl_publish'];
+          final String _latitude = _listItemDitinjau[index]['latitude'];
+          final String _longitude = _listItemDitinjau[index]['longitude'];
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemListReportScreen(
                 gambar: _image,
                 detailreport: _detailreport,
-                waktureport: _waktureport,
+                tglpublish: _tglpublish,
+                latitude: _latitude,
+                longitude: _longitude,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailDitinjauScreen(
                     gambar: _image,
                     deskripsireport: _detailreport,
-                    waktureport: _waktureport,
+                    tglpublish: _tglpublish,
+                    latitude: _latitude,
+                    longitude: _longitude,
                   )));
                 },
               )

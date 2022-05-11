@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_my_report/report_ditinjau/ui/form_editreport.dart';
 
 class DetailDitinjauScreen extends StatefulWidget {
-
   final Image? gambar;
   final String? deskripsireport;
   final String? waktureport;
+  final String? tglpublish;
+  final String? latitude;
+  final String? longitude;
 
-  const DetailDitinjauScreen({Key? key,
-  this.gambar,
-  this.deskripsireport,
-  this.waktureport}) : super(key: key);
+  const DetailDitinjauScreen(
+      {Key? key,
+      this.gambar,
+      this.deskripsireport,
+      this.waktureport,
+      this.tglpublish,
+      this.latitude,
+      this.longitude,})
+      : super(key: key);
 
   @override
   _DetailDitinjauScreenState createState() => _DetailDitinjauScreenState();
@@ -31,15 +39,17 @@ class _DetailDitinjauScreenState extends State<DetailDitinjauScreen> {
                     height: 250,
                     child: widget.gambar,
                   ),
-                  Padding(padding: EdgeInsets.only(top: 10),),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
                   Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade100
-                    ),
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                    decoration: BoxDecoration(color: Colors.blue.shade100),
+                    padding: EdgeInsets.only(
+                        left: 20, right: 20, top: 10, bottom: 10),
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: Text("Ditinjau!",
+                      child: Text(
+                        "Ditinjau!",
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.orange,
@@ -49,9 +59,7 @@ class _DetailDitinjauScreenState extends State<DetailDitinjauScreen> {
                   ),
                   Container(
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade100
-                    ),
+                    decoration: BoxDecoration(color: Colors.blue.shade100),
                     padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                     child: Text("Report anda dalam peninjauan",
                         style: TextStyle(fontSize: 17)),
@@ -62,60 +70,86 @@ class _DetailDitinjauScreenState extends State<DetailDitinjauScreen> {
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Text("Lokasi",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Text("Detail Report",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Text(
-                      widget.deskripsireport!,
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 25),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(right: 20),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Text("${widget.waktureport}",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black54
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text("Tanggal Publish"),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5),
+                            ),
+                            Text("${widget.tglpublish}"),
+                          ],
                         ),
-                      ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child:Text(
+                              "Lokasi",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 5),
+                        ),
+                        Row(
+                          children: [
+                            Text("Latitude : "),
+                            Text("${widget.latitude}"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("Longitude"),
+                            Text("${widget.longitude}"),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 15),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Detail Report",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            widget.deskripsireport!,
+                          style: TextStyle(fontSize: 15),),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 25),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: (){
+                                Navigator.push(
+                                    context, MaterialPageRoute(builder: (context) => EditReportScreen())
+                                );
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete_outline_outlined),
+                              onPressed: (){},
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(),
-                      ),
-                      Icon(
-                        Icons.edit,
-                      ),
-                      Icon(
-                        Icons.delete_outline_outlined,
-                      )
-                    ],
                   ),
                   // Container(
                   //   alignment: Alignment.center,
@@ -129,8 +163,7 @@ class _DetailDitinjauScreenState extends State<DetailDitinjauScreen> {
                   //   ),
                   // ),
                 ],
-              )
-          ),
+              )),
         ),
       ),
     );

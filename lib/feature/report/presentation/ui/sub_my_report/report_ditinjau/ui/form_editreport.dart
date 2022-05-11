@@ -2,16 +2,31 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import '../sub_my_report/list_myreport_screen.dart';
+import '../../list_myreport_screen.dart';
 
-class AddReportScreen extends StatefulWidget {
-  const AddReportScreen({Key? key}) : super(key: key);
+class EditReportScreen extends StatefulWidget {
+
+  final Image? gambar;
+  final String? deskripsireport;
+  final String? waktureport;
+  final String? tglpublish;
+  final String? latitude;
+  final String? longitude;
+
+  const EditReportScreen(
+      {Key? key,
+        this.gambar,
+        this.deskripsireport,
+        this.waktureport,
+        this.tglpublish,
+        this.latitude,
+        this.longitude,}) : super(key: key);
 
   @override
-  _AddReportScreenState createState() => _AddReportScreenState();
+  _EditReportScreenState createState() => _EditReportScreenState();
 }
 
-class _AddReportScreenState extends State<AddReportScreen> {
+class _EditReportScreenState extends State<EditReportScreen> {
 
   final ImagePicker _picker = ImagePicker();
   XFile? pickedFile;
@@ -30,7 +45,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Report"),
+        title: Text("Edit Report"),
       ),
       backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
@@ -74,7 +89,6 @@ class _AddReportScreenState extends State<AddReportScreen> {
                     child: TextFormField(
                       maxLines: 8,
                       decoration: InputDecoration(
-                        labelText: "Input Detail Report",
                         fillColor: Colors.white,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25.0),
@@ -114,9 +128,9 @@ class _AddReportScreenState extends State<AddReportScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Latitude: ${_userLocation?.latitude ?? "-" }', style:
-                          TextStyle(fontSize: 15),),
+                        TextStyle(fontSize: 15),),
                         Text('Longitude: ${_userLocation?.longitude ?? "-" }', style:
-                          TextStyle(fontSize: 15),),
+                        TextStyle(fontSize: 15),),
                       ],
                     ),
                   ),
@@ -145,7 +159,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
                     borderRadius: BorderRadius.circular(10)),
                 child: Align(
                   alignment: Alignment.center,
-                  child: Text("Publish",
+                  child: Text("Save Edit",
                       style: TextStyle(fontSize: 17, color: Colors.white)),
                 ),
               ),

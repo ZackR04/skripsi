@@ -4,7 +4,10 @@ import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_repor
 class ItemListReportScreen extends StatefulWidget {
   final Image gambar;
   final String detailreport;
-  final String waktureport;
+  final String? waktureport;
+  final String? tglpublish;
+  final String? latitude;
+  final String? longitude;
   final Function()? onclick;
 
 
@@ -12,8 +15,12 @@ class ItemListReportScreen extends StatefulWidget {
         {Key? key,
           required this.gambar,
           required this.detailreport,
-          required this.waktureport,
-          this.onclick})
+          this.waktureport,
+          this.tglpublish,
+          this.latitude,
+          this.longitude,
+          this.onclick,
+          })
           : super (key: key);
 
   @override

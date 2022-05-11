@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class ItemContactServiceScreen extends StatefulWidget {
 
@@ -78,7 +79,9 @@ class _ItemContactServiceScreenState extends State<ItemContactServiceScreen> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    FlutterPhoneDirectCaller.callNumber(widget.no_contact);
+                  },
                   child: Text("Hubungi"),
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
