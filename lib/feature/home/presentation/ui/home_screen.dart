@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skripsi_residencereport/feature/contact_service/presentation/ui/menu_contact_service.dart';
+import '../../../inbox/presentation/ui/inbox_screen.dart';
 import '../../../report/presentation/ui/menu_report.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -95,9 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.message),
         onPressed: (){
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => InboxScreen())
-          // );
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => InboxScreen())
+          );
         },
       )
     );

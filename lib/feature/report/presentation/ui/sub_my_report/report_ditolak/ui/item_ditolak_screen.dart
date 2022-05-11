@@ -1,31 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_report/detail_report.dart';
 
-class ItemListReportScreen extends StatefulWidget {
+class ItemDitolakScreen extends StatefulWidget {
+
   final Image gambar;
   final String detailreport;
-  final String? tglpublish;
-  final String? latitude;
-  final String? longitude;
+  final String tglpublish;
+  final String noteditolak;
   final Function()? onclick;
 
-
-  const ItemListReportScreen(
-        {Key? key,
-          required this.gambar,
-          required this.detailreport,
-          this.tglpublish,
-          this.latitude,
-          this.longitude,
-          this.onclick,
-          })
-          : super (key: key);
+  const ItemDitolakScreen
+      ({Key? key,
+        required this.gambar,
+        required this.detailreport,
+        required this.tglpublish,
+        required this.noteditolak,
+        this.onclick,}) : super(key: key);
 
   @override
-  _ItemListReportScreenState createState() => _ItemListReportScreenState();
+  _ItemDitolakScreenState createState() => _ItemDitolakScreenState();
 }
 
-class _ItemListReportScreenState extends State<ItemListReportScreen> {
+class _ItemDitolakScreenState extends State<ItemDitolakScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -53,6 +48,15 @@ class _ItemListReportScreenState extends State<ItemListReportScreen> {
               child: Container(
                 child: Column(
                   children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("Ditolak",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.orange,
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: RichText(
                         maxLines: 5,
@@ -69,7 +73,7 @@ class _ItemListReportScreenState extends State<ItemListReportScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Text("${widget.tglpublish}",
+                      child: Text(widget.tglpublish,
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black54

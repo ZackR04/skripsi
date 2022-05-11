@@ -1,31 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_report/detail_report.dart';
+import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 
-class ItemListReportScreen extends StatefulWidget {
+class ItemSelesaiScreen extends StatefulWidget {
+
   final Image gambar;
   final String detailreport;
-  final String? tglpublish;
-  final String? latitude;
-  final String? longitude;
+  final String tglpublish;
+  final double rating;
   final Function()? onclick;
 
-
-  const ItemListReportScreen(
-        {Key? key,
-          required this.gambar,
-          required this.detailreport,
-          this.tglpublish,
-          this.latitude,
-          this.longitude,
-          this.onclick,
-          })
-          : super (key: key);
+  const ItemSelesaiScreen({Key? key,
+  required this.gambar,
+  required this.detailreport,
+  required this.tglpublish,
+  required this.rating,
+  required this.onclick,}) : super(key: key);
 
   @override
-  _ItemListReportScreenState createState() => _ItemListReportScreenState();
+  _ItemSelesaiScreenState createState() => _ItemSelesaiScreenState();
 }
 
-class _ItemListReportScreenState extends State<ItemListReportScreen> {
+class _ItemSelesaiScreenState extends State<ItemSelesaiScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -53,6 +48,22 @@ class _ItemListReportScreenState extends State<ItemListReportScreen> {
               child: Container(
                 child: Column(
                   children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: RatingStars(
+                        value: widget.rating,
+                        starBuilder: (index, color) => Icon(
+                          Icons.star,
+                          color: color,
+                        ),
+                        starCount: 5,
+                        starSize: 20,
+                        starSpacing: 2,
+                        valueLabelVisibility: false,
+                        starColor: Colors.yellow,
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10)),
                     Expanded(
                       child: RichText(
                         maxLines: 5,
@@ -69,7 +80,7 @@ class _ItemListReportScreenState extends State<ItemListReportScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Text("${widget.tglpublish}",
+                      child: Text(widget.tglpublish,
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black54
