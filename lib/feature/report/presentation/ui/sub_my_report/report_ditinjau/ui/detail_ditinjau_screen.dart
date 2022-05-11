@@ -138,7 +138,9 @@ class _DetailDitinjauScreenState extends State<DetailDitinjauScreen> {
                               icon: Icon(Icons.edit),
                               onPressed: (){
                                 Navigator.push(
-                                    context, MaterialPageRoute(builder: (context) => EditReportScreen())
+                                    context, MaterialPageRoute(builder: (context) => EditReportScreen(
+                                  deskripsireport: widget.deskripsireport,
+                                ))
                                 );
                               },
                             ),

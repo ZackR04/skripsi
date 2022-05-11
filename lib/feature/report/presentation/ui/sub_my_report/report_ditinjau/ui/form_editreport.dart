@@ -33,13 +33,16 @@ class _EditReportScreenState extends State<EditReportScreen> {
   XFile? imagePickedFile;
   LocationData? _userLocation;
   Location location = Location();
+  TextEditingController? deskripsitext;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getLocation();
+    deskripsitext = TextEditingController(text: widget.deskripsireport);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +90,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
                   ),
                   Expanded(
                     child: TextFormField(
+                      controller: deskripsitext,
                       maxLines: 8,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
