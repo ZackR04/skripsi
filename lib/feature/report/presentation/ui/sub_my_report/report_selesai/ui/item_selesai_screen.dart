@@ -5,16 +5,16 @@ class ItemSelesaiScreen extends StatefulWidget {
 
   final Image gambar;
   final String detailreport;
-  final int waktureport;
+  final String tglpublish;
   final double rating;
   final Function()? onclick;
 
   const ItemSelesaiScreen({Key? key,
   required this.gambar,
   required this.detailreport,
-  required this.waktureport,
+  required this.tglpublish,
   required this.rating,
-  required this.onclick}) : super(key: key);
+  required this.onclick,}) : super(key: key);
 
   @override
   _ItemSelesaiScreenState createState() => _ItemSelesaiScreenState();
@@ -80,7 +80,7 @@ class _ItemSelesaiScreenState extends State<ItemSelesaiScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Text("Selesai dalam ${widget.waktureport} hari",
+                      child: Text(widget.tglpublish,
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black54

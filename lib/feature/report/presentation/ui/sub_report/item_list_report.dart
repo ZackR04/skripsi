@@ -4,7 +4,6 @@ import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_repor
 class ItemListReportScreen extends StatefulWidget {
   final Image gambar;
   final String detailreport;
-  final String? waktureport;
   final String? tglpublish;
   final String? latitude;
   final String? longitude;
@@ -15,7 +14,6 @@ class ItemListReportScreen extends StatefulWidget {
         {Key? key,
           required this.gambar,
           required this.detailreport,
-          this.waktureport,
           this.tglpublish,
           this.latitude,
           this.longitude,
@@ -71,7 +69,7 @@ class _ItemListReportScreenState extends State<ItemListReportScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Text("${widget.waktureport}",
+                      child: Text("${widget.tglpublish}",
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black54

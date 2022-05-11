@@ -4,7 +4,7 @@ class ItemDitolakScreen extends StatefulWidget {
 
   final Image gambar;
   final String detailreport;
-  final String waktureport;
+  final String tglpublish;
   final String noteditolak;
   final Function()? onclick;
 
@@ -12,9 +12,9 @@ class ItemDitolakScreen extends StatefulWidget {
       ({Key? key,
         required this.gambar,
         required this.detailreport,
-        required this.waktureport,
+        required this.tglpublish,
         required this.noteditolak,
-        this.onclick}) : super(key: key);
+        this.onclick,}) : super(key: key);
 
   @override
   _ItemDitolakScreenState createState() => _ItemDitolakScreenState();
@@ -73,7 +73,7 @@ class _ItemDitolakScreenState extends State<ItemDitolakScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Text("${widget.waktureport}",
+                      child: Text(widget.tglpublish,
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black54

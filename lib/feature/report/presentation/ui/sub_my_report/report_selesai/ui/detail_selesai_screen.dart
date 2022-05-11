@@ -6,14 +6,14 @@ class DetailSelesaiScreen extends StatefulWidget {
 
   final Image? gambar;
   final String? deskripsireport;
-  final int? waktureport;
+  final String? tglpublish;
   final double rating;
 
   const DetailSelesaiScreen({Key? key,
   this.gambar,
   this.deskripsireport,
-  this.waktureport,
-  required this.rating}) : super(key: key);
+  this.tglpublish,
+  required this.rating,}) : super(key: key);
 
   @override
   _DetailSelesaiScreenState createState() => _DetailSelesaiScreenState();
@@ -81,7 +81,7 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                          "Selesai dalam ${widget.waktureport!} hari",
+                          widget.tglpublish!,
                           style: TextStyle(
                               color: Colors.black38)),
                     ),

@@ -45,7 +45,6 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
       'id' : 0,
       'gambar' : 'assets/report.png',
       'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'waktureport' : 'Kemarin',
       'tgl_publish' : '9 May 2022',
     }
   ];
@@ -55,7 +54,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
       'id' : 0,
       'gambar' : 'assets/report.png',
       'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'waktureport' : 7,
+      'tgl_publish' : '9 May 2022',
       'rating' : 2.0,
     }
   ];
@@ -65,7 +64,6 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
       'id' : 0,
       'gambar' : 'assets/report.png',
       'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'waktureport' : 'Kemarin',
       'noteditolak' : 'Report anda ditolak dikarenakan alasan yang tidak kuat',
       'tgl_publish' : '9 May 2022',
     }
@@ -115,18 +113,18 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemBuilder: (context, int index){
           final Image _image = Image.asset(_listItemDiproses[index]['gambar']);
           final String _detailreport = _listItemDiproses[index]['detailreport'];
-          final String _waktureport = _listItemDiproses[index]['waktureport'];
+          final String _tglpublish = _listItemDiproses[index]['tgl_publish'];
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemListReportScreen(
                 gambar: _image,
                 detailreport: _detailreport,
-                waktureport: _waktureport,
+                tglpublish: _tglpublish,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailReportScreen(
                     gambar: _image,
                     deskripsireport: _detailreport,
-                    waktureport: _waktureport,
+                    tglpublish: _tglpublish,
                   )));
                 },
               )
@@ -141,7 +139,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemBuilder: (context, int index){
           final Image _image = Image.asset(_listItemSelesai[index]['gambar']);
           final String _detailreport = _listItemSelesai[index]['detailreport'];
-          final int _waktureport = _listItemSelesai[index]['waktureport'];
+          final String _tglpublish = _listItemSelesai[index]['tgl_publish'];
           final double _rating = _listItemSelesai[index]['rating'];
           print('check double : $_rating');
           return Padding(
@@ -149,13 +147,13 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
               child: ItemSelesaiScreen(
                 gambar: _image,
                 detailreport: _detailreport,
-                waktureport: _waktureport,
+                tglpublish: _tglpublish,
                 rating: _rating,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailSelesaiScreen(
                     gambar: _image,
                     deskripsireport: _detailreport,
-                    waktureport: _waktureport,
+                    tglpublish: _tglpublish,
                     rating: _rating,
                   )));
                 },
@@ -171,20 +169,20 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemBuilder: (context, int index){
           final Image _image = Image.asset(_listItemDitolak[index]['gambar']);
           final String _detailreport = _listItemDitolak[index]['detailreport'];
-          final String _waktureport = _listItemDitolak[index]['waktureport'];
+          final String _tglpublish = _listItemDitolak[index]['tgl_publish'];
           final String _noteditolak = _listItemDitolak[index]['noteditolak'];
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemDitolakScreen(
                 gambar: _image,
                 detailreport: _detailreport,
-                waktureport: _waktureport,
+                tglpublish: _tglpublish,
                 noteditolak: _noteditolak,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailDitolakScreen(
                     gambar: _image,
                     deskripsireport: _detailreport,
-                    waktureport: _waktureport,
+                    tglpublish: _tglpublish,
                     noteditolak: _noteditolak,
                   )));
                 },

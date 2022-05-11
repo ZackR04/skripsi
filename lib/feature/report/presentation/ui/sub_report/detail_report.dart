@@ -6,9 +6,9 @@ class DetailReportScreen extends StatefulWidget {
 
   final Image? gambar;
   final String? deskripsireport;
-  final String? waktureport;
+  final String? tglpublish;
 
-  const DetailReportScreen({Key? key, this.gambar, this.deskripsireport, this.waktureport})
+  const DetailReportScreen({Key? key, this.gambar, this.deskripsireport, this.tglpublish})
       : super(key: key);
 
   @override
@@ -80,7 +80,7 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                          widget.waktureport!,
+                          widget.tglpublish!,
                           style: TextStyle(
                               color: Colors.black38)),
                     ),

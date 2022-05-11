@@ -14,13 +14,13 @@ class _ListReportScreenState extends State<ListReportScreen> {
       'id' : 0,
       'gambar' : 'assets/report.png',
       'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'waktureport' : 'Kemarin',
+      'tglpublish' : '10 Januari 2015',
     },
     {
       'id' : 1,
       'gambar' : 'assets/logo.png',
       'detailreport' : 'Saran. perlunya polisi tidur di area taman dikarenakan banyaknya anak-anak berlalu-lalang',
-      'waktureport' : '2 Hari lalu',
+      'tglpublish' : '12 Mei 2016',
     }
   ];
 
@@ -38,18 +38,18 @@ class _ListReportScreenState extends State<ListReportScreen> {
           itemBuilder: (context, int index){
             final Image _image = Image.asset(_listItemReport[index]['gambar']);
             final String _detailreport = _listItemReport[index]['detailreport'];
-            final String _waktureport = _listItemReport[index]['waktureport'];
+            final String _tglpublish = _listItemReport[index]['tglpublish'];
             return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemListReportScreen(
                 gambar: _image,
                 detailreport: _detailreport,
-                waktureport: _waktureport,
+                tglpublish: _tglpublish,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailReportScreen(
                     gambar: _image,
                     deskripsireport: _detailreport,
-                    waktureport: _waktureport,
+                    tglpublish: _tglpublish,
                   )));
                 },
               ),

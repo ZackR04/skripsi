@@ -4,14 +4,14 @@ class DetailDitolakScreen extends StatefulWidget {
 
   final Image? gambar;
   final String? deskripsireport;
-  final String? waktureport;
+  final String? tglpublish;
   final String? noteditolak;
 
   const DetailDitolakScreen({Key? key,
   this.gambar,
   this.deskripsireport,
-  this.waktureport,
-  this.noteditolak}) : super(key: key);
+  this.tglpublish,
+  this.noteditolak,}) : super(key: key);
 
   @override
   _DetailDitolakScreenState createState() => _DetailDitolakScreenState();
@@ -75,7 +75,7 @@ class _DetailDitolakScreenState extends State<DetailDitolakScreen> {
                     padding: EdgeInsets.only(right: 20),
                     child: Align(
                       alignment: Alignment.bottomRight,
-                      child: Text("${widget.waktureport}",
+                      child: Text(widget.tglpublish!,
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black54
