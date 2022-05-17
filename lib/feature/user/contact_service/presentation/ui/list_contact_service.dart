@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skripsi_residencereport/feature/contact_service/presentation/ui/item_contact_service.dart';
+import 'package:skripsi_residencereport/feature/user/contact_service/presentation/ui/item_contact_service.dart';
 
 class ListContactServiceScreen extends StatefulWidget {
 

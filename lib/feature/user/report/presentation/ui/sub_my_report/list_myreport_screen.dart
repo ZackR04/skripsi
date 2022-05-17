@@ -1,9 +1,12 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_my_report/report_ditinjau/ui/detail_ditinjau_screen.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_my_report/report_ditolak/ui/detail_ditolak_screen.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_my_report/report_ditolak/ui/item_ditolak_screen.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_my_report/report_selesai/ui/detail_selesai_screen.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_my_report/report_selesai/ui/item_selesai_screen.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditinjau/ui/detail_ditinjau_screen.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditolak/ui/detail_ditolak_screen.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditolak/ui/item_ditolak_screen.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_selesai/ui/detail_selesai_screen.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_selesai/ui/item_selesai_screen.dart';
 
 import '../sub_report/detail_report.dart';
 import '../sub_report/item_list_report.dart';
@@ -21,53 +24,41 @@ class ListMyReportScreen extends StatefulWidget {
 
 class _ListMyReportScreenState extends State<ListMyReportScreen> {
 
-  List _listItemDitinjau = [
-    {
-      'id' : 0,
-      'gambar' : 'assets/report.png',
-      'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'tgl_publish' : '9 May 2022',
-      'latitude' : '-7.7946271',
-      'longitude' : '110.3925474'
-    },
-    {
-      'id' : 1,
-      'gambar' : 'assets/logo.png',
-      'detailreport' : 'Saran. perlunya polisi tidur di area taman dikarenakan banyaknya anak-anak berlalu-lalang',
-      'tgl_publish' : '9 May 2022',
-      'latitude' : '-7.7946271',
-      'longitude' : '110.3925474'
-    }
-  ];
+  var dio = Dio();
 
-  List _listItemDiproses = [
-    {
-      'id' : 0,
-      'gambar' : 'assets/report.png',
-      'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'tgl_publish' : '9 May 2022',
-    }
-  ];
+  List? _listItemDitinjau;
 
-  List _listItemSelesai = [
-    {
-      'id' : 0,
-      'gambar' : 'assets/report.png',
-      'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'tgl_publish' : '9 May 2022',
-      'rating' : 2.0,
-    }
-  ];
+  final List _listItemDiproses = [];
 
-  List _listItemDitolak = [
-    {
-      'id' : 0,
-      'gambar' : 'assets/report.png',
-      'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'noteditolak' : 'Report anda ditolak dikarenakan alasan yang tidak kuat',
-      'tgl_publish' : '9 May 2022',
+  final List _listItemSelesai = [];
+
+  final List _listItemDitolak = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getData();
+  }
+
+  void _getData() async {
+    var formData = FormData.fromMap({
+      'id_user': 2,
+      'status_report': 0
+    });
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/get_report',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listItemDitinjau = jsonDecode(response.data);
+      });
+      print(_listItemDitinjau);
+    }else{
+      print('Failed');
     }
-  ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,14 +67,17 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
       height: double.infinity,
       child: widget.idtab == 1
           ?
+      _listItemDitinjau != null
+          ?
       ListView.builder(
-        itemCount: _listItemDitinjau.length,
-        itemBuilder: (context, int index){
-          final Image _image = Image.asset(_listItemDitinjau[index]['gambar']);
-          final String _detailreport = _listItemDitinjau[index]['detailreport'];
-          final String _tglpublish = _listItemDitinjau[index]['tgl_publish'];
-          final String _latitude = _listItemDitinjau[index]['latitude'];
-          final String _longitude = _listItemDitinjau[index]['longitude'];
+        itemCount: _listItemDitinjau!.length,
+        itemBuilder: (context, index){
+          print(index);
+          final Image _image = Image.asset('assets/${_listItemDitinjau![index]['img']}');
+          final String _detailreport = _listItemDitinjau![index]['deskripsi'];
+          final String _tglpublish = _listItemDitinjau![index]['tanggal_dibuat'];
+          final String _latitude = _listItemDitinjau![index]['lat'];
+          final String _longitude = _listItemDitinjau![index]['lng'];
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemListReportScreen(
@@ -105,6 +99,8 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
           );
         },
       )
+          :
+      Container()
           :
       widget.idtab == 2
           ?

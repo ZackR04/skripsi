@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_my_report/report_ditinjau/ui/form_editreport.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditinjau/ui/form_editreport.dart';
 
 class DetailDitinjauScreen extends StatefulWidget {
   final Image? gambar;
@@ -140,6 +140,8 @@ class _DetailDitinjauScreenState extends State<DetailDitinjauScreen> {
                                 Navigator.push(
                                     context, MaterialPageRoute(builder: (context) => EditReportScreen(
                                   deskripsireport: widget.deskripsireport,
+                                  latitude: widget.latitude,
+                                  longitude: widget.longitude,
                                 ))
                                 );
                               },

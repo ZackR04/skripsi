@@ -18,6 +18,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
   XFile? imagePickedFile;
   LocationData? _userLocation;
   Location location = Location();
+  bool showLoad = false;
 
   @override
   void initState() {
@@ -40,17 +41,29 @@ class _AddReportScreenState extends State<AddReportScreen> {
               width: double.infinity,
               height: 170,
               color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.only(left: 100, right: 100, top: 15, bottom: 15),
-                child: OutlinedButton(
-                  onPressed: (){
-                    _onImageButtonPressed();
-                  },
-                  child: imagePickedFile != null ? Image.file(File(imagePickedFile!.path)) : Icon(Icons.add_a_photo_outlined, color: Colors.black, size: 30,),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1.0, color: Colors.blue.shade100),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                        width: 270,
+                        height: 140,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blue)
+                        ),
+                        child: imagePickedFile != null ? Image.file(File(imagePickedFile!.path)) : Icon(Icons.camera_alt_outlined)
+                    ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: MaterialButton(
+                      onPressed: (){
+                        _onImageButtonPressed();
+                      },
+                      child: Icon(Icons.change_circle),
+                    ),
+                  )
+                ],
               ),
             ),
             Padding(
@@ -100,7 +113,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 110,
+              height: 125,
               color: Colors.white,
               padding: EdgeInsets.only(left: 15, right: 20, top: 10, bottom: 10),
               child: Column(
@@ -109,14 +122,20 @@ class _AddReportScreenState extends State<AddReportScreen> {
                     alignment: Alignment.topLeft,
                     child: Text("Location", style: TextStyle(fontSize: 20)),
                   ),
-                  Expanded(
-                    child: Column(
+                  Container(
+                    child: showLoad == true ? const CircularProgressIndicator() : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Latitude: ${_userLocation?.latitude ?? "-" }', style:
                           TextStyle(fontSize: 15),),
                         Text('Longitude: ${_userLocation?.longitude ?? "-" }', style:
                           TextStyle(fontSize: 15),),
+                        MaterialButton(
+                          onPressed: (){
+                            _getLocation();
+                          },
+                          child: const Icon(Icons.refresh),
+                        ),
                       ],
                     ),
                   ),
@@ -167,9 +186,13 @@ class _AddReportScreenState extends State<AddReportScreen> {
   }
 
   void _getLocation() async {
+    setState(() {
+      showLoad = true;
+    });
     final _locationData = await location.getLocation();
     setState(() {
       _userLocation = _locationData;
+      showLoad = false;
     });
   }
 }

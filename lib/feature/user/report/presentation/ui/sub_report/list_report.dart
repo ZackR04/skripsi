@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_report/detail_report.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_report/item_list_report.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_report/detail_report.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_report/item_list_report.dart';
 
 class ListReportScreen extends StatefulWidget {
   @override

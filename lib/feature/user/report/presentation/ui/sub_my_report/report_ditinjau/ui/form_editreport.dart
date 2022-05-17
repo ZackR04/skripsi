@@ -34,6 +34,10 @@ class _EditReportScreenState extends State<EditReportScreen> {
   LocationData? _userLocation;
   Location location = Location();
   TextEditingController? deskripsitext;
+  bool showLoad = false;
+
+  String lat = '';
+  String lng = '';
 
   @override
   void initState() {
@@ -42,7 +46,6 @@ class _EditReportScreenState extends State<EditReportScreen> {
     _getLocation();
     deskripsitext = TextEditingController(text: widget.deskripsireport);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +61,29 @@ class _EditReportScreenState extends State<EditReportScreen> {
               width: double.infinity,
               height: 170,
               color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.only(left: 100, right: 100, top: 15, bottom: 15),
-                child: OutlinedButton(
-                  onPressed: (){
-                    _onImageButtonPressed();
-                  },
-                  child: imagePickedFile != null ? Image.file(File(imagePickedFile!.path)) : Icon(Icons.add_a_photo_outlined, color: Colors.black, size: 30,),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1.0, color: Colors.blue.shade100),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                        width: 270,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.blue)
+                        ),
+                        child: imagePickedFile != null ? Image.file(File(imagePickedFile!.path)) : Icon(Icons.camera_alt_outlined)
+                    ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: MaterialButton(
+                      onPressed: (){
+                        _onImageButtonPressed();
+                      },
+                      child: Icon(Icons.change_circle),
+                    ),
+                  )
+                ],
               ),
             ),
             Padding(
@@ -118,7 +133,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 110,
+              height: 125,
               color: Colors.white,
               padding: EdgeInsets.only(left: 15, right: 20, top: 10, bottom: 10),
               child: Column(
@@ -127,14 +142,22 @@ class _EditReportScreenState extends State<EditReportScreen> {
                     alignment: Alignment.topLeft,
                     child: Text("Location", style: TextStyle(fontSize: 20)),
                   ),
-                  Expanded(
-                    child: Column(
+                  Container(
+                    child: showLoad == true ? const CircularProgressIndicator() : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Latitude: ${_userLocation?.latitude ?? "-" }', style:
-                        TextStyle(fontSize: 15),),
-                        Text('Longitude: ${_userLocation?.longitude ?? "-" }', style:
-                        TextStyle(fontSize: 15),),
+                        Text('Latitude: ${lat == '' ? widget.latitude : lat}', style:
+                          TextStyle(fontSize: 15)),
+                        Text('Longitude: ${lng == '' ? widget.longitude : lng}', style:
+                        TextStyle(fontSize: 15)),
+                        MaterialButton(
+                          onPressed: (){
+                            setState(() {
+                              _getLocation();
+                            });
+                          },
+                          child: const Icon(Icons.refresh),
+                        ),
                       ],
                     ),
                   ),
@@ -185,9 +208,13 @@ class _EditReportScreenState extends State<EditReportScreen> {
   }
 
   void _getLocation() async {
+    setState(() {
+      showLoad = true;
+    });
     final _locationData = await location.getLocation();
     setState(() {
       _userLocation = _locationData;
+      showLoad = false;
     });
   }
 }

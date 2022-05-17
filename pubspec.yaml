@@ -83,6 +83,7 @@ flutter:
      - assets/serv_bangun.png
      - assets/serv_bangunan.png
      - assets/tukang_kebun.png
+     - assets/example.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

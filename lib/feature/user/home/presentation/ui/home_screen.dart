@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skripsi_residencereport/feature/contact_service/presentation/ui/menu_contact_service.dart';
+import 'package:skripsi_residencereport/feature/user/contact_service/presentation/ui/menu_contact_service.dart';
 import '../../../inbox/presentation/ui/inbox_screen.dart';
 import '../../../report/presentation/ui/menu_report.dart';
 

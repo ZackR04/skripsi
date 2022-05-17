@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_add_report/add_report_screen.dart';
-import 'package:skripsi_residencereport/feature/report/presentation/ui/sub_my_report/my_report_screen.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_add_report/add_report_screen.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/my_report_screen.dart';
 import 'sub_report/list_report.dart';
 import 'package:steps_indicator/steps_indicator.dart';
 

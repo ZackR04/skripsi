@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:skripsi_residencereport/feature/contact_service/presentation/ui/list_contact_service.dart';
+import 'package:skripsi_residencereport/feature/user/contact_service/presentation/ui/list_contact_service.dart';
 
 class MenuContactServiceScreen extends StatefulWidget {
   @override
