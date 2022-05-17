@@ -1,21 +1,26 @@
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 
-
-class DetailReportScreen extends StatefulWidget {
+class DetailSelesaiScreen extends StatefulWidget {
 
   final Image? gambar;
   final String? deskripsireport;
-  final String? tglpublish;
+  final int? waktureport;
+  final double rating;
 
-  const DetailReportScreen({Key? key, this.gambar, this.deskripsireport, this.tglpublish})
+  const DetailSelesaiScreen({Key? key,
+    this.gambar,
+    this.deskripsireport,
+    this.waktureport,
+    required this.rating})
       : super(key: key);
 
   @override
-  _DetailReportScreenState createState() => _DetailReportScreenState();
+  _DetailSelesaiScreenState createState() => _DetailSelesaiScreenState();
 }
 
-class _DetailReportScreenState extends State<DetailReportScreen> {
+class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
 
   final List _listDetailReport = [
     {
@@ -53,7 +58,6 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
   StepperType _type = StepperType.vertical;
   int _index = 0;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,20 +78,39 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                     decoration: BoxDecoration(
                         color: Colors.blue.shade100
                     ),
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                          widget.tglpublish!,
+                          "Selesai dalam ${widget.waktureport!} hari",
                           style: TextStyle(
                               color: Colors.black38)),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
+                      color: Colors.blue.shade100
+                    ),
+                    child: Center(
+                      child: RatingStars(
+                        value: widget.rating,
+                        starBuilder: (index, color) => Icon(
+                          Icons.star,
+                          color: color,
+                        ),
+                        starCount: 5,
+                        starSize: 40,
+                        starSpacing: 0,
+                        valueLabelVisibility: false,
+                        starColor: Colors.yellow,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
                         color: Colors.blue.shade100
                     ),
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    padding: EdgeInsets.only(left: 20, top: 5,right: 20, bottom: 10),
                     child: Text(
                         widget.deskripsireport!,
                         style: TextStyle(fontSize: 16)),
@@ -96,8 +119,7 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                     padding: EdgeInsets.only(top: 20),
                   ),
                   Expanded(
-                    child:
-                    buildStepper(context)
+                      child: buildStepper(context)
                   ),
                 ],
               )
@@ -107,35 +129,6 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
     );
   }
 
-  Widget _reportNotes(int index, String report) {
-    return Text(
-        report,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.black54),
-    );
-  }
-
-  void next(){
-    if (_index < _listDetailReport.length-1) {
-      setState(() {
-        _index++;
-      });
-      return;
-    }
-  }
-
-  void back(){
-    if (_index > 0) {
-      setState(() {
-        _index--;
-      });
-      return;
-    }
-  }
-
-
   Widget buildStepper(BuildContext context) {
     return EnhanceStepper(
         type: _type,
@@ -143,23 +136,23 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
         physics: ClampingScrollPhysics(),
         steps: _listDetailReport.map((e) =>
             EnhanceStep(
-              icon: Icon(
-                _index == _listDetailReport.indexOf(e) ? _listDetailReport[_listDetailReport.indexOf(e)]['icon'] : Icons.adjust_rounded,
-                color: _index == _listDetailReport.indexOf(e) ? Colors.blue : Colors.grey,
-              ),
-              isActive: _index == _listDetailReport.indexOf(e),
-              title: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['title_activity']}"),
-              subtitle: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['subtitle_activity']}"),
-              content: Row(
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['deskripsi']}", textAlign: TextAlign.left)
-                    ),
-                  )
-                ],
-              )
+                icon: Icon(
+                  _index == _listDetailReport.indexOf(e) ? _listDetailReport[_listDetailReport.indexOf(e)]['icon'] : Icons.adjust_rounded,
+                  color: _index == _listDetailReport.indexOf(e) ? Colors.blue : Colors.grey,
+                ),
+                isActive: _index == _listDetailReport.indexOf(e),
+                title: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['title_activity']}"),
+                subtitle: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['subtitle_activity']}"),
+                content: Row(
+                  children: [
+                    Expanded(
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['deskripsi']}", textAlign: TextAlign.left)
+                      ),
+                    )
+                  ],
+                )
             )
         ).toList(),
         onStepCancel: () {
@@ -203,5 +196,23 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
             ),
           );
         });
+  }
+
+  void back() {
+    if (_index > 0) {
+      setState(() {
+        _index--;
+      });
+      return;
+  }
+}
+
+  void next() {
+    if (_index < _listDetailReport.length-1) {
+      setState(() {
+        _index++;
+      });
+      return;
+    }
   }
 }
