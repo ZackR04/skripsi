@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:skripsi_residencereport/feature/authentication/presentation/ui/login_screen.dart';
-
 import '../../../petugas/home_pet/presentation/ui/home_screen_pet.dart';
 
 class RegisterScreen extends StatefulWidget {
