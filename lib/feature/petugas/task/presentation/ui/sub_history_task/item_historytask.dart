@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 
-class ItemSelesaiScreen extends StatefulWidget {
+class ItemHistoryTask extends StatefulWidget {
 
   final Image gambar;
   final String detailreport;
-  final int waktureport;
+  final String tglpublish;
   final double rating;
   final Function()? onclick;
 
-  const ItemSelesaiScreen({Key? key,
+  const ItemHistoryTask({Key? key,
     required this.gambar,
     required this.detailreport,
-    required this.waktureport,
+    required this.tglpublish,
     required this.rating,
-    this.onclick})
-      : super(key: key);
+    this.onclick}) : super(key: key);
 
   @override
-  _ItemSelesaiScreenState createState() => _ItemSelesaiScreenState();
+  _ItemHistoryTaskState createState() => _ItemHistoryTaskState();
 }
 
-class _ItemSelesaiScreenState extends State<ItemSelesaiScreen> {
-
+class _ItemHistoryTaskState extends State<ItemHistoryTask> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -82,7 +80,7 @@ class _ItemSelesaiScreenState extends State<ItemSelesaiScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Text("Selesai dalam ${widget.waktureport} hari",
+                      child: Text(widget.tglpublish,
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black54

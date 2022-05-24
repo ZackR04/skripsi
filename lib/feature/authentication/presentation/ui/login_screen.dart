@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skripsi_residencereport/feature/authentication/presentation/ui/register_screen.dart';
+import 'package:skripsi_residencereport/feature/petugas/home_pet/presentation/ui/home_screen_pet.dart';
 import 'package:skripsi_residencereport/feature/user/home/presentation/ui/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -100,7 +100,8 @@ class _LoginScreenState extends State<LoginScreen> {
           elevation: 0,
           padding: EdgeInsets.all(15),
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreenPet()));
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

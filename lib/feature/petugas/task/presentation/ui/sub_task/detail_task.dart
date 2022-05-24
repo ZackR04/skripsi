@@ -1,28 +1,22 @@
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:skripsi_residencereport/feature/petugas/task/presentation/ui/sub_task/update_task_form.dart';
 
-class DetailSelesaiScreen extends StatefulWidget {
+class DetailTaskScreen extends StatefulWidget {
 
   final Image? gambar;
   final String? deskripsireport;
-  final int? waktureport;
-  final double rating;
+  final String? tglpublish;
 
-  const DetailSelesaiScreen({Key? key,
-    this.gambar,
-    this.deskripsireport,
-    this.waktureport,
-    required this.rating})
-      : super(key: key);
+  const DetailTaskScreen({Key? key, this.gambar, this.deskripsireport, this.tglpublish}) : super(key: key);
 
   @override
-  _DetailSelesaiScreenState createState() => _DetailSelesaiScreenState();
+  _DetailTaskScreenState createState() => _DetailTaskScreenState();
 }
 
-class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
+class _DetailTaskScreenState extends State<DetailTaskScreen> {
 
-  final List _listDetailReport = [
+  final List _listDetailTask = [
     {
       'icon' : Icons.check_circle_outline,
       'title_activity' : 'Activity 1',
@@ -78,39 +72,20 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                     decoration: BoxDecoration(
                         color: Colors.blue.shade100
                     ),
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                          "Selesai dalam ${widget.waktureport!} hari",
+                          widget.tglpublish!,
                           style: TextStyle(
                               color: Colors.black38)),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.blue.shade100
-                    ),
-                    child: Center(
-                      child: RatingStars(
-                        value: widget.rating,
-                        starBuilder: (index, color) => Icon(
-                          Icons.star,
-                          color: color,
-                        ),
-                        starCount: 5,
-                        starSize: 40,
-                        starSpacing: 0,
-                        valueLabelVisibility: false,
-                        starColor: Colors.yellow,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
                         color: Colors.blue.shade100
                     ),
-                    padding: EdgeInsets.only(left: 20, top: 5,right: 20, bottom: 10),
+                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                     child: Text(
                         widget.deskripsireport!,
                         style: TextStyle(fontSize: 16)),
@@ -126,6 +101,14 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.post_add),
+        onPressed: (){
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context) => UpdateTaskForm())
+          );
+        },
+      ),
     );
   }
 
@@ -134,21 +117,21 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
         type: _type,
         currentStep: _index,
         physics: ClampingScrollPhysics(),
-        steps: _listDetailReport.map((e) =>
+        steps: _listDetailTask.map((e) =>
             EnhanceStep(
                 icon: Icon(
-                  _index == _listDetailReport.indexOf(e) ? _listDetailReport[_listDetailReport.indexOf(e)]['icon'] : Icons.adjust_rounded,
-                  color: _index == _listDetailReport.indexOf(e) ? Colors.blue : Colors.grey,
+                  _index == _listDetailTask.indexOf(e) ? _listDetailTask[_listDetailTask.indexOf(e)]['icon'] : Icons.adjust_rounded,
+                  color: _index == _listDetailTask.indexOf(e) ? Colors.blue : Colors.grey,
                 ),
-                isActive: _index == _listDetailReport.indexOf(e),
-                title: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['title_activity']}"),
-                subtitle: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['subtitle_activity']}"),
+                isActive: _index == _listDetailTask.indexOf(e),
+                title: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['title_activity']}"),
+                subtitle: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['subtitle_activity']}"),
                 content: Row(
                   children: [
                     Expanded(
                       child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['deskripsi']}", textAlign: TextAlign.left)
+                          child: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['deskripsi']}", textAlign: TextAlign.left)
                       ),
                     )
                   ],
@@ -159,6 +142,7 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
           back();
         },
         onStepContinue: () {
+
           next();
         },
         onStepTapped: (index) {
@@ -174,7 +158,7 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                 SizedBox(
                   height: 30,
                 ),
-                _index < _listDetailReport.length-1
+                _index < _listDetailTask.length-1
                     ?
                 TextButton(
                   onPressed: details.onStepContinue,
@@ -199,16 +183,16 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
   }
 
   void back() {
-    if (_index > 0) {
+    if (_index < _listDetailTask.length-1) {
       setState(() {
-        _index--;
+        _index++;
       });
       return;
+    }
   }
-}
 
   void next() {
-    if (_index < _listDetailReport.length-1) {
+    if (_index < _listDetailTask.length-1) {
       setState(() {
         _index++;
       });

@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 
-class ItemDitolakScreen extends StatefulWidget {
+class ItemListTask extends StatefulWidget {
 
   final Image gambar;
   final String detailreport;
-  final String waktureport;
-  final String noteditolak;
+  final String? tglpublish;
+  final String? latitude;
+  final String? longitude;
   final Function()? onclick;
 
-
-  const ItemDitolakScreen(
-      {Key? key,
-        required this.gambar,
-        required this.detailreport,
-        required this.waktureport,
-        required this.noteditolak,
-        this.onclick, })
-      : super (key: key);
+  const ItemListTask({Key? key,
+    required this.gambar,
+    required this.detailreport,
+    this.tglpublish,
+    this.latitude,
+    this.longitude,
+    this.onclick}) :
+        super(key: key);
 
   @override
-  _ItemDitolakScreenState createState() => _ItemDitolakScreenState();
+  _ItemListTaskState createState() => _ItemListTaskState();
 }
 
-class _ItemDitolakScreenState extends State<ItemDitolakScreen> {
+class _ItemListTaskState extends State<ItemListTask> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -50,15 +50,6 @@ class _ItemDitolakScreenState extends State<ItemDitolakScreen> {
               child: Container(
                 child: Column(
                   children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text("Ditolak",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.orange,
-                        ),
-                      ),
-                    ),
                     Expanded(
                       child: RichText(
                         maxLines: 5,
@@ -75,7 +66,7 @@ class _ItemDitolakScreenState extends State<ItemDitolakScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Text("${widget.waktureport}",
+                      child: Text("${widget.tglpublish}",
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black54
