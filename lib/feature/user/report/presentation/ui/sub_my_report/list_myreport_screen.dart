@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditinjau/ui/detail_ditinjau_screen.dart';
@@ -7,7 +6,6 @@ import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditolak/ui/item_ditolak_screen.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_selesai/ui/detail_selesai_screen.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_selesai/ui/item_selesai_screen.dart';
-
 import '../sub_report/detail_report.dart';
 import '../sub_report/item_list_report.dart';
 

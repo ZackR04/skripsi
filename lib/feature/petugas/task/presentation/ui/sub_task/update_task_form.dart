@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
@@ -12,6 +13,8 @@ class UpdateTaskForm extends StatefulWidget {
 }
 
 class _UpdateTaskFormState extends State<UpdateTaskForm> {
+
+  var date = DateFormat('dd MMM yyyy').format(DateTime.now());
 
   final ImagePicker _picker = ImagePicker();
   XFile? pickedFile;
@@ -71,11 +74,18 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
             ),
             Container(
               width: double.infinity,
-              height: 230,
+              height: 250,
               color: Colors.white,
               padding: EdgeInsets.only(left: 15, right: 20, top: 10, bottom: 10),
               child: Column(
                 children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("Tanggal ${date}", style: TextStyle(fontSize: 15, color: Colors.black45)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text("Detail", style: TextStyle(fontSize: 20)),
@@ -85,7 +95,7 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
                   ),
                   Expanded(
                     child: TextFormField(
-                      maxLines: 8,
+                      maxLines: 7,
                       decoration: InputDecoration(
                         labelText: "Input Detail Update",
                         fillColor: Colors.white,
@@ -109,13 +119,13 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 20),
+              padding: EdgeInsets.only(top: 25),
             ),
             Container(
               width: double.infinity,
               height: 115,
               color: Colors.white,
-              padding: EdgeInsets.only(left: 15, right: 20, top: 10, bottom: 10),
+              padding: EdgeInsets.only(left: 15, right: 20, bottom: 10),
               child: Column(
                 children: [
                   Align(
@@ -143,7 +153,7 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 30),
+              padding: EdgeInsets.only(top: 25),
             ),
             Container(
               padding: EdgeInsets.only(left: 25, right: 25),

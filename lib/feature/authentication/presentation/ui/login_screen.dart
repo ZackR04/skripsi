@@ -1,8 +1,9 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skripsi_residencereport/feature/authentication/presentation/ui/register_screen.dart';
-import 'package:skripsi_residencereport/feature/petugas/home_pet/presentation/ui/home_screen_pet.dart';
-import 'package:skripsi_residencereport/feature/user/home/presentation/ui/home_screen.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,13 +12,17 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+
+  var dio = Dio();
   TextEditingController username = new TextEditingController();
   TextEditingController password = new TextEditingController();
   String msg = 'Login untuk melanjutkan';
+  String msg_error = '';
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _showPassword = false;
+  bool _showLoading = false;
   void _togglevisibility(){
     setState(() {
       _showPassword = !_showPassword;
@@ -44,13 +49,13 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(padding: EdgeInsets.only(top: 16 )),
             Container(
               padding: EdgeInsets.only(bottom: 10),
-              child: Text("Username atau Password salah", style: TextStyle(color: Colors.red, fontSize: 11),),
+              child: Text(msg_error, style: TextStyle(color: Colors.red, fontSize: 11),),
             ),
             _usernameField(),
             Padding(padding: EdgeInsets.only(top: 16)),
             _passwordField(),
             Padding(padding: EdgeInsets.only(top: 16)),
-            _buttonSubmit(),
+            _showLoading ? CircularProgressIndicator() : _buttonSubmit(),
             Padding(padding: EdgeInsets.only(top: 16)),
             _textRegister(),
           ],
@@ -100,8 +105,10 @@ class _LoginScreenState extends State<LoginScreen> {
           elevation: 0,
           padding: EdgeInsets.all(15),
           onPressed: (){
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreenPet()));
+            setState(() {
+              _showLoading = true;
+            });
+            _loginProses(username.text, password.text);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -127,5 +134,75 @@ class _LoginScreenState extends State<LoginScreen> {
         )
       ],
     );
+  }
+
+  void _loginProses(String _username, String _password) async {
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+
+   if(_username == ''){
+     setState(() {
+       _showLoading = false;
+       msg_error = "Username harus diisi";
+     });
+   }
+   else if (_password == ''){
+     setState(() {
+       _showLoading = false;
+       msg_error = "Password harus diisi";
+     });
+   }
+   else{
+     var formData = FormData.fromMap({
+       'username': _username,
+       'password': _password
+     });
+
+     final response = await dio.post(
+       'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiAuthentication/login',
+       data: formData
+     );
+
+     if(response.statusCode == 200){
+       var data = json.decode(response.data);
+       if(data['status_message'] == 'success'){
+         if (data['accept'] == '0'){
+           setState(() {
+             _showLoading = false;
+             msg_error = "Maaf ${data['nama']}, akun anda belum disetujui oleh admin";
+           });
+         } else if (data['accept'] == '2'){
+           setState(() {
+             _showLoading = false;
+             msg_error = "Maaf ${data['nama']}, pembuatan akun anda ditolak oleh admin. Silahkan ulangi pembuatan akun anda";
+           });
+         } else{
+           prefs.setString('id', data['id']);
+           prefs.setString('nama', data['nama']);
+           prefs.setString('username', data['username']);
+           prefs.setString('password', data['password']);
+           prefs.setString('no_hp', data['no_hp']);
+           prefs.setString('nik', data['nik']);
+           prefs.setString('status', data['status']);
+           prefs.setBool('isLogin', data['isLogin']);
+
+           if(data['status'] == 'Petugas'){
+             Navigator.pushReplacementNamed(context, '/homepetugas');
+           }else{
+             Navigator.pushReplacementNamed(context, '/home');
+           }
+         }
+       }else{
+         setState(() {
+           _showLoading = false;
+           msg_error = "Maaf, username atau password salah";
+         });
+       }
+     }else{
+       setState(() {
+         _showLoading = false;
+         msg_error = "Maaf, system sedang error";
+       });
+     }
+   }
   }
 }

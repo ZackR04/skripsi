@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:skripsi_residencereport/feature/petugas/task/presentation/ui/sub_history_task/detail_historytask.dart';
 import 'package:skripsi_residencereport/feature/petugas/task/presentation/ui/sub_history_task/item_historytask.dart';
@@ -11,7 +13,35 @@ class HistoryTaskScreen extends StatefulWidget {
 
 class _HistoryTaskScreenState extends State<HistoryTaskScreen> {
 
-  final List _listItemHistoryTask = [];
+  var dio = Dio();
+
+  List _listItemHistoryTask = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getData();
+  }
+
+  void _getData() async {
+    var formData = FormData.fromMap({
+      'id_user': 2,
+      'status_report': 0
+    });
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/get_report',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listItemHistoryTask = jsonDecode(response.data);
+      });
+      print(_listItemHistoryTask);
+    }else{
+      print('Failed');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

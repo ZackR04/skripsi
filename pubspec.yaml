@@ -46,6 +46,7 @@ dependencies:
   flutter_rating_stars: ^1.0.3+4
   flutter_phone_direct_caller: ^2.1.1
   location: ^4.3.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
