@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../sub_my_report/list_myreport_screen.dart';
 
 class AddReportScreen extends StatefulWidget {
@@ -13,12 +16,16 @@ class AddReportScreen extends StatefulWidget {
 
 class _AddReportScreenState extends State<AddReportScreen> {
 
+  var dio = Dio();
+  bool _showLoading = false;
   final ImagePicker _picker = ImagePicker();
+  TextEditingController detailReport = new TextEditingController();
   XFile? pickedFile;
   XFile? imagePickedFile;
   LocationData? _userLocation;
   Location location = Location();
   bool showLoad = false;
+  String msg_error = '';
 
   @override
   void initState() {
@@ -85,6 +92,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
                   ),
                   Expanded(
                     child: TextFormField(
+                      controller: detailReport,
                       maxLines: 8,
                       decoration: InputDecoration(
                         labelText: "Input Detail Report",
@@ -152,9 +160,10 @@ class _AddReportScreenState extends State<AddReportScreen> {
               child: MaterialButton(
                 color: Colors.blue,
                 onPressed: (){
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => ListMyReportScreen(idtab: 1,))
-                  );
+                  setState(() {
+                    _showLoading = true;
+                  });
+                  _addProcess(imagePickedFile, detailReport.text, '${_userLocation?.latitude}', '${_userLocation?.longitude}');
                 },
                 shape: RoundedRectangleBorder(
                     side: BorderSide(
@@ -194,5 +203,50 @@ class _AddReportScreenState extends State<AddReportScreen> {
       _userLocation = _locationData;
       showLoad = false;
     });
+  }
+
+  void _addProcess(XFile? imagePickedFile, String detailReport, String latitude, String longitude) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if(imagePickedFile == null){
+      setState(() {
+        _showLoading = false;
+        msg_error = "Image tidak boleh kosong";
+      });
+    }
+    else if (detailReport == ''){
+      setState(() {
+        _showLoading = false;
+        msg_error = "Detail Report harus diisi";
+      });
+    }else {
+      var formData = FormData.fromMap({
+        'image': imagePickedFile,
+        'deskripsi': detailReport,
+        'lat': latitude,
+        'lng': longitude,
+        'id_user': prefs.getString('id'),
+        'status_report': 0,
+      });
+
+      final response = await dio.post(
+          'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/add_report',
+          data: formData
+      );
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.data);
+        if (data['status_message'] == 'success') {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ListMyReportScreen(idtab: 1,))
+          );
+        }else{
+          setState(() {
+            _showLoading = false;
+            msg_error = "Maaf, system sedang error";
+          });
+        }
+      }
+    }
   }
 }

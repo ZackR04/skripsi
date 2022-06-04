@@ -29,7 +29,7 @@ class _HomeScreenPetState extends State<HomeScreenPet> {
                     child: Row(
                       children: [
                         IconButton(
-                          icon: Image.asset('assets/report.png'),
+                          icon: Image.asset('assets/task.png'),
                           iconSize: 150,
                           onPressed: (){
                             Navigator.push(
@@ -71,14 +71,14 @@ class _HomeScreenPetState extends State<HomeScreenPet> {
                                     textAlign: TextAlign.center),
                                 Padding(
                                     padding: EdgeInsets.only(bottom: 10)),
-                                Text("History Task adalah menu yang menampil- kan pekerjaan-peker- jaan perumahan yang sudah diselesaikan petugas.",
+                                Text("History Task adalah menu yang menampilkan pekerjaan-pekerjaan perumahan yang sudah diselesaikan petugas.",
                                   style: TextStyle(color: Colors.black54),
                                   textAlign: TextAlign.start,),
                               ],
                             )
                         ),
                         IconButton(
-                          icon: Image.asset('assets/cs.png'),
+                          icon: Image.asset('assets/historytask.png'),
                           iconSize: 150,
                           onPressed: (){
                             Navigator.push(

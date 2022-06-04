@@ -16,7 +16,6 @@ class _LoginScreenState extends State<LoginScreen> {
   var dio = Dio();
   TextEditingController username = new TextEditingController();
   TextEditingController password = new TextEditingController();
-  String msg = 'Login untuk melanjutkan';
   String msg_error = '';
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -45,7 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('assets/ilustrasi_login.png'),
-            Text(msg, style: TextStyle(color: Colors.red, fontSize: 11), ),
             Padding(padding: EdgeInsets.only(top: 16 )),
             Container(
               padding: EdgeInsets.only(bottom: 10),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditinjau/ui/detail_ditinjau_screen.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditolak/ui/detail_ditolak_screen.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditolak/ui/item_ditolak_screen.dart';
@@ -26,22 +27,33 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
 
   List? _listItemDitinjau;
 
-  final List _listItemDiproses = [];
+  List? _listItemDiproses;
 
-  final List _listItemSelesai = [];
+  List? _listItemSelesai;
 
-  final List _listItemDitolak = [];
+  List? _listItemDitolak;
+
+  SharedPreferences? prefs;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getData();
+    _getPrefs();
+    _getDataDitinjau();
+    _getDataDiproses();
+    _getDataSelesai();
+    _getDataDitolak();
   }
 
-  void _getData() async {
+  void _getPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  void _getDataDitinjau() async {
     var formData = FormData.fromMap({
       'id_user': 2,
+      // prefs?.getString('id'),
       'status_report': 0
     });
     final response = await dio.post(
@@ -53,6 +65,64 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         _listItemDitinjau = jsonDecode(response.data);
       });
       print(_listItemDitinjau);
+    }else{
+      print('Failed');
+    }
+  }
+
+  void _getDataDiproses() async {
+    var formData = FormData.fromMap({
+      'id_user': 2,
+      // prefs?.getString('id'),
+      'status_report': 2
+    });
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/get_report',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listItemDiproses = jsonDecode(response.data);
+      });
+      print(_listItemDiproses);
+    }else{
+      print('Failed');
+    }
+  }
+
+  void _getDataSelesai() async {
+    var formData = FormData.fromMap({
+      'id_user': prefs?.getString('id'),
+      'status_report': 4
+    });
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/get_report',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listItemSelesai = jsonDecode(response.data);
+      });
+      print(_listItemSelesai);
+    }else{
+      print('Failed');
+    }
+  }
+
+  void _getDataDitolak() async {
+    var formData = FormData.fromMap({
+      'id_user': prefs?.getString('id'),
+      'status_report': 3
+    });
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/get_report',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listItemDitolak = jsonDecode(response.data);
+      });
+      print(_listItemDitolak);
     }else{
       print('Failed');
     }
@@ -102,12 +172,15 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
           :
       widget.idtab == 2
           ?
+      _listItemDiproses != null
+          ?
       ListView.builder(
-        itemCount: _listItemDiproses.length,
-        itemBuilder: (context, int index){
-          final Image _image = Image.asset(_listItemDiproses[index]['gambar']);
-          final String _detailreport = _listItemDiproses[index]['detailreport'];
-          final String _tglpublish = _listItemDiproses[index]['tgl_publish'];
+        itemCount: _listItemDiproses!.length,
+        itemBuilder: (context, index){
+          print(index);
+          final Image _image = Image.asset('assets/${_listItemDiproses![index]['img']}');
+          final String _detailreport = _listItemDiproses![index]['deskripsi'];
+          final String _tglpublish = _listItemDiproses![index]['tanggal_dibuat'];
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemListReportScreen(
@@ -126,16 +199,20 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         },
       )
           :
+      Container()
+          :
       widget.idtab == 3
           ?
+      _listItemSelesai != null
+          ?
       ListView.builder(
-        itemCount: _listItemSelesai.length,
-        itemBuilder: (context, int index){
-          final Image _image = Image.asset(_listItemSelesai[index]['gambar']);
-          final String _detailreport = _listItemSelesai[index]['detailreport'];
-          final String _tglpublish = _listItemSelesai[index]['tgl_publish'];
-          final double _rating = _listItemSelesai[index]['rating'];
-          print('check double : $_rating');
+        itemCount: _listItemSelesai!.length,
+        itemBuilder: (context, index){
+          print(index);
+          final Image _image = Image.asset('assets/${_listItemSelesai![index]['img']}');
+          final String _detailreport = _listItemSelesai![index]['deskripsi'];
+          final String _tglpublish = _listItemSelesai![index]['tanggal_dibuat'];
+          final double _rating = _listItemSelesai![index]['rating'];
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemSelesaiScreen(
@@ -156,15 +233,20 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         },
       )
           :
+      Container()
+          :
       widget.idtab == 4
           ?
+      _listItemDitolak != null
+          ?
       ListView.builder(
-        itemCount: _listItemDitolak.length,
-        itemBuilder: (context, int index){
-          final Image _image = Image.asset(_listItemDitolak[index]['gambar']);
-          final String _detailreport = _listItemDitolak[index]['detailreport'];
-          final String _tglpublish = _listItemDitolak[index]['tgl_publish'];
-          final String _noteditolak = _listItemDitolak[index]['noteditolak'];
+        itemCount: _listItemDitolak!.length,
+        itemBuilder: (context, index){
+          print(index);
+          final Image _image = Image.asset('assets/${_listItemDitolak![index]['img']}');
+          final String _detailreport = _listItemDitolak![index]['deskripsi'];
+          final String _tglpublish = _listItemDitolak![index]['tanggal_dibuat'];
+          final String _noteditolak = _listItemDitolak![index]['noteditolak'];
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemDitolakScreen(
@@ -184,6 +266,8 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
           );
         },
       )
+          :
+      Container()
           :
       Container(),
     );

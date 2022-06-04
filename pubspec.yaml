@@ -47,6 +47,7 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   location: ^4.3.0
   intl: ^0.17.0
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +86,8 @@ flutter:
      - assets/serv_bangunan.png
      - assets/tukang_kebun.png
      - assets/example.png
+     - assets/task.png
+     - assets/historytask.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

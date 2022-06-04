@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_report/detail_report.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_report/item_list_report.dart';
 
@@ -9,20 +12,29 @@ class ListReportScreen extends StatefulWidget {
 
 class _ListReportScreenState extends State<ListReportScreen> {
 
-  List _listItemReport = [
-    {
-      'id' : 0,
-      'gambar' : 'assets/report.png',
-      'detailreport' : 'Aspal didepan rumah Blok C berlubang, saya rasa kerusakannya sudah sangat menggangu aktivitas warga',
-      'tglpublish' : '10 Januari 2015',
-    },
-    {
-      'id' : 1,
-      'gambar' : 'assets/logo.png',
-      'detailreport' : 'Saran. perlunya polisi tidur di area taman dikarenakan banyaknya anak-anak berlalu-lalang',
-      'tglpublish' : '12 Mei 2016',
+  var dio = Dio();
+  List? _listItemReport;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getDataReport();
+  }
+
+  void _getDataReport() async {
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/get_report',
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listItemReport = jsonDecode(response.data);
+      });
+      print(_listItemReport);
+    }else{
+      print('Failed');
     }
-  ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +46,11 @@ class _ListReportScreenState extends State<ListReportScreen> {
         padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
         height: double.infinity,
         child: ListView.builder(
-          itemCount: _listItemReport.length,
+          itemCount: _listItemReport!.length,
           itemBuilder: (context, int index){
-            final Image _image = Image.asset(_listItemReport[index]['gambar']);
-            final String _detailreport = _listItemReport[index]['detailreport'];
-            final String _tglpublish = _listItemReport[index]['tglpublish'];
+            final Image _image = Image.asset(_listItemReport![index]['gambar']);
+            final String _detailreport = _listItemReport![index]['detailreport'];
+            final String _tglpublish = _listItemReport![index]['tglpublish'];
             return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemListReportScreen(
