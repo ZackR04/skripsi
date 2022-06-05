@@ -5,6 +5,7 @@ import 'package:skripsi_residencereport/feature/splash/presentation/bloc/splash_
 import 'package:skripsi_residencereport/feature/splash/presentation/ui/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skripsi_residencereport/feature/user/home/presentation/ui/home_screen.dart';
+import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/my_report_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           '/login': (context) => LoginScreen(),
           '/home': (context) => HomeScreen(),
-          '/homepetugas': (context) => HomeScreenPet()
+          '/homepetugas': (context) => HomeScreenPet(),
+          '/myreport': (context) => MyReportScreen(),
         },
       ),
     );

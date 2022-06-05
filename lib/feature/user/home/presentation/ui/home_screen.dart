@@ -42,8 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Report",
-                                style: TextStyle(fontSize: 25),
-                                textAlign: TextAlign.center),
+                                style: TextStyle(fontSize: 25)),
                             Padding(
                                 padding: EdgeInsets.only(bottom: 10)),
                             Text("Report adalah menu untuk mengirimkan report/laporan terkait kendala di perumahan kepada petugas perumahan",
@@ -67,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text("Info Kontak Service",
                                 style: TextStyle(fontSize: 25),
-                                textAlign: TextAlign.center),
+                            ),
                             Padding(
                                 padding: EdgeInsets.only(bottom: 10)),
                             Text("Info Kontak Service adalah menu yang menampilkan kontak-kontak service perumahan yang berguna untuk penduduk",
@@ -91,22 +90,24 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: Container(),
               ),
-              Row(
-                children: [
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: IconButton(
-                      icon: Icon(Icons.logout),
-                      iconSize: 30,
-                      onPressed: () async {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        await prefs.clear();
-                        Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
-                      },
-                    ),
+              Container(
+                alignment: Alignment.bottomLeft,
+                child: MaterialButton(
+                  onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.clear();
+                    Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+                  },
+                  child:  Row(
+                    children: [
+                      Icon(Icons.logout),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5),
+                      ),
+                      Text("Logout"),
+                    ],
                   ),
-                  Text("Logout"),
-                ],
+                ),
               ),
             ],
           ),

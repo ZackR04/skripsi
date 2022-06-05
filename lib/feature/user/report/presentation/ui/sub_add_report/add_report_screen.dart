@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../sub_my_report/list_myreport_screen.dart';
 
 class AddReportScreen extends StatefulWidget {
   const AddReportScreen({Key? key}) : super(key: key);
@@ -220,13 +220,15 @@ class _AddReportScreenState extends State<AddReportScreen> {
         msg_error = "Detail Report harus diisi";
       });
     }else {
+      dio.options.headers = {
+        'Content-Type': 'application/form-data'
+      };
       var formData = FormData.fromMap({
-        'image': imagePickedFile,
+        'image_report': await MultipartFile.fromFile(imagePickedFile.path, filename: 'upload.jpg'),
         'deskripsi': detailReport,
         'lat': latitude,
         'lng': longitude,
         'id_user': prefs.getString('id'),
-        'status_report': 0,
       });
 
       final response = await dio.post(
@@ -237,9 +239,17 @@ class _AddReportScreenState extends State<AddReportScreen> {
       if (response.statusCode == 200) {
         var data = json.decode(response.data);
         if (data['status_message'] == 'success') {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ListMyReportScreen(idtab: 1,))
+          await CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,
+              text: '${data['message']}',
+              autoCloseDuration: const Duration(seconds: 10),
+              confirmBtnText: 'Ok!',
+              onConfirmBtnTap: (){}
           );
+
+          Navigator.pushReplacementNamed(context, '/myreport');
+
         }else{
           setState(() {
             _showLoading = false;

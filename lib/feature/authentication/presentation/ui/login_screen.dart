@@ -135,7 +135,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _loginProses(String _username, String _password) async {
-   SharedPreferences prefs = await SharedPreferences.getInstance();
 
    if(_username == ''){
      setState(() {
@@ -174,6 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
              msg_error = "Maaf ${data['nama']}, pembuatan akun anda ditolak oleh admin. Silahkan ulangi pembuatan akun anda";
            });
          } else{
+           SharedPreferences prefs = await SharedPreferences.getInstance();
            prefs.setString('id', data['id']);
            prefs.setString('nama', data['nama']);
            prefs.setString('username', data['username']);
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
            prefs.setString('nik', data['nik']);
            prefs.setString('status', data['status']);
            prefs.setBool('isLogin', data['isLogin']);
-
+           print('DATA SEASON: ${prefs.getString('id')}');
            if(data['status'] == 'Petugas'){
              Navigator.pushReplacementNamed(context, '/homepetugas');
            }else{

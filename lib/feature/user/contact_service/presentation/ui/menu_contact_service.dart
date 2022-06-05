@@ -11,27 +11,27 @@ class _MenuContactServiceScreenState extends State<MenuContactServiceScreen> {
 
   List _listContactService = [
     {
-      'id' : 0,
+      'id' : 1,
       'image' : 'assets/cleaning_services.png',
       'title' : 'Cleaning Service',
     },
     {
-      'id' : 1,
+      'id' : 2,
       'image' : 'assets/faucet.png',
       'title' : 'Saluran Air & Pipa',
     },
     {
-      'id' : 2,
+      'id' : 3,
       'image' : 'assets/serv_bangun.png',
       'title' : 'Service Bangunan',
     },
     {
-      'id' : 3,
+      'id' : 4,
       'image' : 'assets/listrik.png',
       'title' : 'Perbaikan Listrik',
     },
     {
-      'id' : 4,
+      'id' : 5,
       'image' : 'assets/tukang_kebun.png',
       'title' : 'Tukang Kebun',
     },

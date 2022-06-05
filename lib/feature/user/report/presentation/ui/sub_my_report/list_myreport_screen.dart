@@ -33,27 +33,26 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
 
   List? _listItemDitolak;
 
-  SharedPreferences? prefs;
+  var prefs;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getPrefs();
+  }
+
+  void _getPrefs() async {
+    prefs = await SharedPreferences.getInstance();
     _getDataDitinjau();
     _getDataDiproses();
     _getDataSelesai();
     _getDataDitolak();
   }
 
-  void _getPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-  }
-
   void _getDataDitinjau() async {
     var formData = FormData.fromMap({
-      'id_user': 2,
-      // prefs?.getString('id'),
+      'id_user': prefs.getString('id'),
       'status_report': 0
     });
     final response = await dio.post(
@@ -72,8 +71,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
 
   void _getDataDiproses() async {
     var formData = FormData.fromMap({
-      'id_user': 2,
-      // prefs?.getString('id'),
+      'id_user': prefs.getString('id'),
       'status_report': 2
     });
     final response = await dio.post(
@@ -92,7 +90,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
 
   void _getDataSelesai() async {
     var formData = FormData.fromMap({
-      'id_user': prefs?.getString('id'),
+      'id_user': prefs.getString('id'),
       'status_report': 4
     });
     final response = await dio.post(
@@ -111,7 +109,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
 
   void _getDataDitolak() async {
     var formData = FormData.fromMap({
-      'id_user': prefs?.getString('id'),
+      'id_user': prefs.getString('id'),
       'status_report': 3
     });
     final response = await dio.post(
@@ -141,7 +139,8 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemCount: _listItemDitinjau!.length,
         itemBuilder: (context, index){
           print(index);
-          final Image _image = Image.asset('assets/${_listItemDitinjau![index]['img']}');
+          final String _id = _listItemDitinjau![index]['id'];
+          final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemDitinjau![index]['img']);
           final String _detailreport = _listItemDitinjau![index]['deskripsi'];
           final String _tglpublish = _listItemDitinjau![index]['tanggal_dibuat'];
           final String _latitude = _listItemDitinjau![index]['lat'];
@@ -156,6 +155,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
                 longitude: _longitude,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailDitinjauScreen(
+                    id: _id,
                     gambar: _image,
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,
@@ -178,7 +178,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemCount: _listItemDiproses!.length,
         itemBuilder: (context, index){
           print(index);
-          final Image _image = Image.asset('assets/${_listItemDiproses![index]['img']}');
+          final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemDiproses![index]['img']);
           final String _detailreport = _listItemDiproses![index]['deskripsi'];
           final String _tglpublish = _listItemDiproses![index]['tanggal_dibuat'];
           return Padding(
@@ -209,10 +209,10 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemCount: _listItemSelesai!.length,
         itemBuilder: (context, index){
           print(index);
-          final Image _image = Image.asset('assets/${_listItemSelesai![index]['img']}');
+          final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemSelesai![index]['img']);
           final String _detailreport = _listItemSelesai![index]['deskripsi'];
           final String _tglpublish = _listItemSelesai![index]['tanggal_dibuat'];
-          final double _rating = _listItemSelesai![index]['rating'];
+          final double _rating = double.parse(_listItemSelesai![index]['rating']);
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemSelesaiScreen(
@@ -243,7 +243,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemCount: _listItemDitolak!.length,
         itemBuilder: (context, index){
           print(index);
-          final Image _image = Image.asset('assets/${_listItemDitolak![index]['img']}');
+          final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemDitolak![index]['img']);
           final String _detailreport = _listItemDitolak![index]['deskripsi'];
           final String _tglpublish = _listItemDitolak![index]['tanggal_dibuat'];
           final String _noteditolak = _listItemDitolak![index]['noteditolak'];

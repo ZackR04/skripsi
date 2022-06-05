@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skripsi_residencereport/feature/user/contact_service/presentation/ui/item_contact_service.dart';
 
 class ListContactServiceScreen extends StatefulWidget {
@@ -15,20 +19,41 @@ class ListContactServiceScreen extends StatefulWidget {
 
 class _ListContactServiceScreenState extends State<ListContactServiceScreen> {
 
-  List _listItemContactService = [
-    {
-      'id' : 0,
-      'namaperusahaan' : 'PT. Bersih Jaya',
-      'detailperusahaan' : 'Berlokasi di jalan Patimura No.23 perusahaan ini sudah berdiri sejak tahun 2012 dan melayani banyak pelanggan dengan...',
-      'nocontact' : '+6281260006443'
-    },
-    {
-      'id' : 1,
-      'namaperusahaan' : 'PT. Rapi Jaya',
-      'detailperusahaan' : 'Berlokasi di jalan Patimura No.23 perusahaan ini sudah berdiri sejak tahun 2012 dan melayani banyak pelanggan dengan...',
-      'nocontact' : '+6282164436000'
+  var dio = Dio();
+  List? _listItemContactService;
+  var prefs;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getPrefs();
+  }
+
+  void _getPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    _getItemContactService();
+  }
+
+  void _getItemContactService() async {
+
+    var formData = FormData.fromMap({
+      'id_bidang': widget.idContact,
+    });
+
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiInfoContactService/get_info_contact_service',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listItemContactService = jsonDecode(response.data);
+      });
+      print(_listItemContactService);
+    }else{
+      print('Failed');
     }
-  ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +64,12 @@ class _ListContactServiceScreenState extends State<ListContactServiceScreen> {
       body: Container(
         padding: EdgeInsets.only(left: 30, right: 30, top: 15),
         height: double.infinity,
-        child: ListView.builder(
-          itemCount: _listItemContactService.length,
+        child: _listItemContactService != null ? ListView.builder(
+          itemCount: _listItemContactService!.length,
           itemBuilder: (context, int index){
-            final String _perusahaanname = _listItemContactService[index]['namaperusahaan'];
-            final String _perusahaandetail = _listItemContactService[index]['detailperusahaan'];
-            final String _contactid = _listItemContactService[index]['nocontact'];
+            final String _perusahaanname = _listItemContactService![index]['nama_perusahaan'];
+            final String _perusahaandetail = _listItemContactService![index]['detail_perusahaan'];
+            final String _contactid = _listItemContactService![index]['no_hp'];
             return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemContactServiceScreen(
@@ -54,7 +79,7 @@ class _ListContactServiceScreenState extends State<ListContactServiceScreen> {
               ),
             );
           },
-        ),
+        ) : Container(),
       ),
     );
   }

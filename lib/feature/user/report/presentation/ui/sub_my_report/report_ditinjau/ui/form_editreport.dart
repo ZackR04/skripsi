@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import '../../list_myreport_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditReportScreen extends StatefulWidget {
 
@@ -12,6 +15,7 @@ class EditReportScreen extends StatefulWidget {
   final String? tglpublish;
   final String? latitude;
   final String? longitude;
+  final String? id;
 
   const EditReportScreen(
       {Key? key,
@@ -20,7 +24,8 @@ class EditReportScreen extends StatefulWidget {
         this.waktureport,
         this.tglpublish,
         this.latitude,
-        this.longitude,}) : super(key: key);
+        this.longitude,
+        this.id}) : super(key: key);
 
   @override
   _EditReportScreenState createState() => _EditReportScreenState();
@@ -28,13 +33,16 @@ class EditReportScreen extends StatefulWidget {
 
 class _EditReportScreenState extends State<EditReportScreen> {
 
+  var dio = Dio();
+  bool _showLoading = false;
   final ImagePicker _picker = ImagePicker();
   XFile? pickedFile;
   XFile? imagePickedFile;
   LocationData? _userLocation;
   Location location = Location();
-  TextEditingController? deskripsitext;
+  var deskripsitext;
   bool showLoad = false;
+  String msg_error = '';
 
   String lat = '';
   String lng = '';
@@ -43,8 +51,8 @@ class _EditReportScreenState extends State<EditReportScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getLocation();
     deskripsitext = TextEditingController(text: widget.deskripsireport);
+    setshowimage();
   }
 
   @override
@@ -71,7 +79,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.blue)
                         ),
-                        child: imagePickedFile != null ? Image.file(File(imagePickedFile!.path)) : Icon(Icons.camera_alt_outlined)
+                        child: setshowimage()
                     ),
                   ),
                   Align(
@@ -152,9 +160,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
                         TextStyle(fontSize: 15)),
                         MaterialButton(
                           onPressed: (){
-                            setState(() {
-                              _getLocation();
-                            });
+                            _getLocation();
                           },
                           child: const Icon(Icons.refresh),
                         ),
@@ -174,9 +180,10 @@ class _EditReportScreenState extends State<EditReportScreen> {
               child: MaterialButton(
                 color: Colors.blue,
                 onPressed: (){
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => ListMyReportScreen(idtab: 1,))
-                  );
+                  setState(() {
+                    _showLoading = true;
+                  });
+                  _editProcess(imagePickedFile, deskripsitext.text, '${_userLocation?.latitude}', '${_userLocation?.longitude}');
                 },
                 shape: RoundedRectangleBorder(
                     side: BorderSide(
@@ -214,7 +221,69 @@ class _EditReportScreenState extends State<EditReportScreen> {
     final _locationData = await location.getLocation();
     setState(() {
       _userLocation = _locationData;
+      lat = '${_userLocation?.latitude}';
+      lng = '${_userLocation?.longitude}';
       showLoad = false;
     });
+  }
+
+  void _editProcess(XFile? imagePickedFile, String deskripsireport, String latitude, String longitude) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (deskripsireport == ''){
+      print('jalan2');
+      setState(() {
+        _showLoading = false;
+        msg_error = "Detail Report harus diisi";
+      });
+    }else {
+      print('jalan');
+      dio.options.headers = {
+        'Content-Type': 'application/form-data'
+      };
+      var formData = FormData.fromMap({
+        'image_report': imagePickedFile == null ? '' : await MultipartFile.fromFile(imagePickedFile.path, filename: 'upload.jpg'),
+        'deskripsi': deskripsireport,
+        'lat': latitude,
+        'lng': longitude,
+        'id_user': prefs.getString('id'),
+        'id': widget.id,
+      });
+
+      final response = await dio.post(
+          'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/update_report',
+          data: formData
+      );
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.data);
+        if (data['status_message'] == 'success') {
+          await CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,
+              text: '${data['message']}',
+              autoCloseDuration: const Duration(seconds: 10),
+              confirmBtnText: 'Ok!',
+              onConfirmBtnTap: (){}
+          );
+
+          Navigator.pushReplacementNamed(context, '/myreport');
+
+        }else{
+          setState(() {
+            _showLoading = false;
+            msg_error = "Maaf, system sedang error";
+          });
+        }
+      }
+    }
+  }
+
+  Image? setshowimage() {
+    if(imagePickedFile == null){
+      return widget.gambar;
+    } else {
+      return Image.file(File(imagePickedFile!.path));
+    }
   }
 }

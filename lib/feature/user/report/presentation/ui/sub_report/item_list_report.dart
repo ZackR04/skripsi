@@ -18,7 +18,7 @@ class ItemListReportScreen extends StatefulWidget {
           this.latitude,
           this.longitude,
           this.onclick,
-          })
+        })
           : super (key: key);
 
   @override

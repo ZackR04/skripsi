@@ -8,6 +8,7 @@ class DetailDitinjauScreen extends StatefulWidget {
   final String? tglpublish;
   final String? latitude;
   final String? longitude;
+  final String? id;
 
   const DetailDitinjauScreen(
       {Key? key,
@@ -16,7 +17,8 @@ class DetailDitinjauScreen extends StatefulWidget {
       this.waktureport,
       this.tglpublish,
       this.latitude,
-      this.longitude,})
+      this.longitude,
+      this.id,})
       : super(key: key);
 
   @override
@@ -139,6 +141,8 @@ class _DetailDitinjauScreenState extends State<DetailDitinjauScreen> {
                               onPressed: (){
                                 Navigator.push(
                                     context, MaterialPageRoute(builder: (context) => EditReportScreen(
+                                  id: widget.id,
+                                  gambar: widget.gambar,
                                   deskripsireport: widget.deskripsireport,
                                   latitude: widget.latitude,
                                   longitude: widget.longitude,
