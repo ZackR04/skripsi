@@ -32,7 +32,7 @@ class _ItemDitolakScreenState extends State<ItemDitolakScreen> {
         decoration: BoxDecoration(
             border: Border.all(color: Colors.blue),
             borderRadius: BorderRadius.circular(10),
-            color: Colors.blue.shade100),
+            color: Colors.blue.shade50),
         child: Row(
           children: [
             Container(
@@ -58,13 +58,16 @@ class _ItemDitolakScreenState extends State<ItemDitolakScreen> {
                       ),
                     ),
                     Expanded(
-                      child: RichText(
-                        maxLines: 5,
-                        overflow: TextOverflow.ellipsis,
-                        strutStyle: StrutStyle(fontSize: 15.0),
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            text: widget.detailreport
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: RichText(
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
+                          strutStyle: StrutStyle(fontSize: 15.0),
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              text: widget.detailreport
+                          ),
                         ),
                       ),
                     ),
@@ -72,7 +75,7 @@ class _ItemDitolakScreenState extends State<ItemDitolakScreen> {
                       padding: EdgeInsets.only(top: 30),
                     ),
                     Align(
-                      alignment: Alignment.bottomLeft,
+                      alignment: Alignment.bottomRight,
                       child: Text(widget.tglpublish,
                         style: TextStyle(
                             fontSize: 15,

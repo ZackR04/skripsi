@@ -17,13 +17,17 @@ class DetailSelesaiScreen extends StatefulWidget {
   final Image? gambar;
   final String? deskripsireport;
   final String? tglpublish;
+  final String? latitude;
+  final String? longitude;
   final double rating;
 
   const DetailSelesaiScreen({Key? key,
-  this.gambar,
-  this.deskripsireport,
-  this.tglpublish,
-  required this.rating,}) : super(key: key);
+    this.gambar,
+    this.deskripsireport,
+    this.tglpublish,
+    this.latitude,
+    this.longitude,
+    required this.rating,}) : super(key: key);
 
   @override
   _DetailSelesaiScreenState createState() => _DetailSelesaiScreenState();
@@ -85,44 +89,65 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                   Padding(padding: EdgeInsets.only(top: 10),),
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.blue.shade100
+                        color: Colors.blue.shade200
                     ),
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                          widget.tglpublish!,
-                          style: TextStyle(
-                              color: Colors.black38)),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade100
-                    ),
-                    child: Center(
-                      child: RatingStars(
-                        value: widget.rating,
-                        starBuilder: (index, color) => Icon(
-                          Icons.star,
-                          color: color,
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                    child: Column(
+                      children: [
+                        Center(
+                          child: RatingStars(
+                            value: widget.rating,
+                            starBuilder: (index, color) => Icon(
+                              Icons.star,
+                              color: color,
+                            ),
+                            starCount: 5,
+                            starSize: 40,
+                            starSpacing: 0,
+                            valueLabelVisibility: false,
+                            starColor: Colors.yellow,
+                          ),
                         ),
-                        starCount: 5,
-                        starSize: 40,
-                        starSpacing: 0,
-                        valueLabelVisibility: false,
-                        starColor: Colors.yellow,
-                      ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('Tanggal Publish ${widget.tglpublish!}', style: TextStyle(color: Colors.black38)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Detail Report", style: TextStyle(fontSize: 18)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                              widget.deskripsireport!,
+                              style: TextStyle(fontSize: 16)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Lokasi", style: TextStyle(fontSize: 18)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 5),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Latitude : ${widget.latitude}"),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Longitude : ${widget.longitude}"),
+                        ),
+                      ],
                     ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade100
-                    ),
-                    padding: EdgeInsets.only(left: 20, top: 5,right: 20, bottom: 10),
-                    child: Text(
-                        widget.deskripsireport!,
-                        style: TextStyle(fontSize: 16)),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 20),

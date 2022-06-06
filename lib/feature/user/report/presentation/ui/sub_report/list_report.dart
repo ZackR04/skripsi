@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_selesai/ui/detail_selesai_screen.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_selesai/ui/item_selesai_screen.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_report/detail_report.dart';
@@ -53,8 +52,9 @@ class _ListReportScreenState extends State<ListReportScreen> {
             final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemReport![index]['img']);
             final String _detailreport = _listItemReport![index]['deskripsi'];
             final String _tglpublish = _listItemReport![index]['tanggal_dibuat'];
+            final String _latitude = _listItemReport![index]['lat'];
+            final String _longitude = _listItemReport![index]['lng'];
             final double _rating = double.parse(_listItemReport![index]['rating']);
-            print('CEK STATUS = ${_listItemReport![index]['status_report']} - ${_listItemReport![index]['status_report'] != '4'}');
             return Padding(
               padding: EdgeInsets.only(top: 15),
               child: _listItemReport![index]['status_report'] != '4' ? ItemListReportScreen(
@@ -66,6 +66,8 @@ class _ListReportScreenState extends State<ListReportScreen> {
                     gambar: _image,
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,
+                    latitude: _latitude,
+                    longitude: _longitude,
                   )));
                 },
               )
@@ -79,6 +81,8 @@ class _ListReportScreenState extends State<ListReportScreen> {
                     gambar: _image,
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,
+                    latitude: _latitude,
+                    longitude: _longitude,
                     rating: _rating,
                   )));
                 },

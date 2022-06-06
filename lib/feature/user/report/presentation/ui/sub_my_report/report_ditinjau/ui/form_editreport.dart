@@ -99,11 +99,18 @@ class _EditReportScreenState extends State<EditReportScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 230,
+              height: 250,
               color: Colors.white,
               padding: EdgeInsets.only(left: 15, right: 20, top: 10, bottom: 10),
               child: Column(
                 children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("Tanggal Publish ${widget.tglpublish}", style: TextStyle(fontSize: 15, color: Colors.black45)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text("Detail Report", style: TextStyle(fontSize: 20)),
@@ -141,9 +148,9 @@ class _EditReportScreenState extends State<EditReportScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 125,
+              height: 105,
               color: Colors.white,
-              padding: EdgeInsets.only(left: 15, right: 20, top: 10, bottom: 10),
+              padding: EdgeInsets.only(left: 15, right: 20, top: 10),
               child: Column(
                 children: [
                   Align(

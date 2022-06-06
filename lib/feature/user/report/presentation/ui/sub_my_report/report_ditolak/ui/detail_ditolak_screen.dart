@@ -6,12 +6,16 @@ class DetailDitolakScreen extends StatefulWidget {
   final String? deskripsireport;
   final String? tglpublish;
   final String? noteditolak;
+  final String? latitude;
+  final String? longitude;
 
   const DetailDitolakScreen({Key? key,
   this.gambar,
   this.deskripsireport,
   this.tglpublish,
-  this.noteditolak,}) : super(key: key);
+  this.noteditolak,
+  this.latitude,
+  this.longitude}) : super(key: key);
 
   @override
   _DetailDitolakScreenState createState() => _DetailDitolakScreenState();
@@ -39,50 +43,78 @@ class _DetailDitolakScreenState extends State<DetailDitolakScreen> {
                         color: Colors.blue.shade100
                     ),
                     padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text("Ditolak!",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.orange,
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Ditolak!",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.orange,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade100
-                    ),
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    child: Text(
-                        widget.noteditolak!,
-                        style: TextStyle(fontSize: 17)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Text(
-                      widget.deskripsireport!,
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 25),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(right: 20),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Text(widget.tglpublish!,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black54
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(widget.noteditolak!, style: TextStyle(fontSize: 17)),
                         ),
-                      ),
+                      ],
                     ),
-                  )
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child:  Text("Tanggal Publish ${widget.tglpublish}", style: TextStyle(color: Colors.grey),),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child:Text(
+                            "Lokasi",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 5),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Latitude : ${widget.latitude}"),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Longitude : ${widget.longitude}"),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 15),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Detail Report",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            widget.deskripsireport!,
+                            style: TextStyle(fontSize: 15),),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               )
           ),

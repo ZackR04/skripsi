@@ -151,8 +151,6 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
                 gambar: _image,
                 detailreport: _detailreport,
                 tglpublish: _tglpublish,
-                latitude: _latitude,
-                longitude: _longitude,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailDitinjauScreen(
                     id: _id,
@@ -181,6 +179,8 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
           final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemDiproses![index]['img']);
           final String _detailreport = _listItemDiproses![index]['deskripsi'];
           final String _tglpublish = _listItemDiproses![index]['tanggal_dibuat'];
+          final String _latitude = _listItemDiproses![index]['lat'];
+          final String _longitude = _listItemDiproses![index]['lng'];
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemListReportScreen(
@@ -192,6 +192,8 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
                     gambar: _image,
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,
+                    latitude: _latitude,
+                    longitude: _longitude,
                   )));
                 },
               )
@@ -212,6 +214,8 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
           final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemSelesai![index]['img']);
           final String _detailreport = _listItemSelesai![index]['deskripsi'];
           final String _tglpublish = _listItemSelesai![index]['tanggal_dibuat'];
+          final String _latitude = _listItemSelesai![index]['lat'];
+          final String _longitude = _listItemSelesai![index]['lng'];
           final double _rating = double.parse(_listItemSelesai![index]['rating']);
           return Padding(
               padding: EdgeInsets.only(top: 15),
@@ -225,6 +229,8 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
                     gambar: _image,
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,
+                    latitude: _latitude,
+                    longitude: _longitude,
                     rating: _rating,
                   )));
                 },
@@ -247,6 +253,8 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
           final String _detailreport = _listItemDitolak![index]['deskripsi'];
           final String _tglpublish = _listItemDitolak![index]['tanggal_dibuat'];
           final String _noteditolak = _listItemDitolak![index]['noteditolak'];
+          final String _latitude = _listItemDitolak![index]['lat'];
+          final String _longitude = _listItemDitolak![index]['lng'];
           return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemDitolakScreen(
@@ -260,6 +268,8 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,
                     noteditolak: _noteditolak,
+                    latitude: _latitude,
+                    longitude: _longitude,
                   )));
                 },
               )

@@ -95,7 +95,7 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
                   ),
                   Expanded(
                     child: TextFormField(
-                      maxLines: 7,
+                      maxLines: 8,
                       decoration: InputDecoration(
                         labelText: "Input Detail Update",
                         fillColor: Colors.white,
@@ -119,13 +119,13 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 25),
+              padding: EdgeInsets.only(top: 20),
             ),
             Container(
               width: double.infinity,
-              height: 115,
+              height: 105,
               color: Colors.white,
-              padding: EdgeInsets.only(left: 15, right: 20, bottom: 10),
+              padding: EdgeInsets.only(left: 15, right: 20),
               child: Column(
                 children: [
                   Align(
@@ -153,7 +153,7 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 25),
+              padding: EdgeInsets.only(top: 30),
             ),
             Container(
               padding: EdgeInsets.only(left: 25, right: 25),

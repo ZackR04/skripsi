@@ -4,6 +4,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +17,7 @@ class AddReportScreen extends StatefulWidget {
 
 class _AddReportScreenState extends State<AddReportScreen> {
 
+  var date = DateFormat('dd MMM yyyy').format(DateTime.now());
   var dio = Dio();
   bool _showLoading = false;
   final ImagePicker _picker = ImagePicker();
@@ -78,11 +80,18 @@ class _AddReportScreenState extends State<AddReportScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 230,
+              height: 250,
               color: Colors.white,
-              padding: EdgeInsets.only(left: 15, right: 20, top: 10, bottom: 10),
+              padding: EdgeInsets.only(left: 15, right: 20, top: 15, bottom: 10),
               child: Column(
                 children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("Tanggal ${date}", style: TextStyle(fontSize: 15, color: Colors.black45)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text("Detail Report", style: TextStyle(fontSize: 20)),
@@ -121,9 +130,9 @@ class _AddReportScreenState extends State<AddReportScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 125,
+              height: 105,
               color: Colors.white,
-              padding: EdgeInsets.only(left: 15, right: 20, top: 10, bottom: 10),
+              padding: EdgeInsets.only(left: 15, right: 20, top: 10),
               child: Column(
                 children: [
                   Align(
@@ -163,7 +172,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
                   setState(() {
                     _showLoading = true;
                   });
-                  _addProcess(imagePickedFile, detailReport.text, '${_userLocation?.latitude}', '${_userLocation?.longitude}');
+                  _addProcess(imagePickedFile, date ,detailReport.text, '${_userLocation?.latitude}', '${_userLocation?.longitude}');
                 },
                 shape: RoundedRectangleBorder(
                     side: BorderSide(
@@ -205,7 +214,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
     });
   }
 
-  void _addProcess(XFile? imagePickedFile, String detailReport, String latitude, String longitude) async {
+  void _addProcess(XFile? imagePickedFile, String date ,String detailReport, String latitude, String longitude) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if(imagePickedFile == null){
@@ -224,6 +233,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
         'Content-Type': 'application/form-data'
       };
       var formData = FormData.fromMap({
+        'create_date': date,
         'image_report': await MultipartFile.fromFile(imagePickedFile.path, filename: 'upload.jpg'),
         'deskripsi': detailReport,
         'lat': latitude,

@@ -22,10 +22,11 @@ class _ItemContactServiceScreenState extends State<ItemContactServiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 30, right: 20, top: 10, bottom: 5),
+      padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
       width: double.infinity,
       height: 140,
       decoration: BoxDecoration(
+        color: Colors.blue.shade50,
         border: Border.all(color: Colors.blue),
         borderRadius: BorderRadius.circular(10),
       ),
@@ -48,13 +49,16 @@ class _ItemContactServiceScreenState extends State<ItemContactServiceScreen> {
                   padding: EdgeInsets.only(top: 5),
                 ),
                 Expanded(
-                  child: RichText(
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    strutStyle: StrutStyle(fontSize: 12.0),
-                    text: TextSpan(
-                      style: TextStyle(color: Colors.black),
-                      text: widget.deskripsi,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: RichText(
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      strutStyle: StrutStyle(fontSize: 12.0),
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.black),
+                        text: widget.deskripsi,
+                      ),
                     ),
                   ),
                 )
@@ -79,6 +83,7 @@ class _ItemContactServiceScreenState extends State<ItemContactServiceScreen> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: MaterialButton(
+                  color: Colors.white,
                   onPressed: () async {
                     FlutterPhoneDirectCaller.callNumber(widget.no_contact);
                   },

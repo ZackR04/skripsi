@@ -10,11 +10,11 @@ class ItemSelesaiScreen extends StatefulWidget {
   final Function()? onclick;
 
   const ItemSelesaiScreen({Key? key,
-  required this.gambar,
-  required this.detailreport,
-  required this.tglpublish,
-  required this.rating,
-  required this.onclick,}) : super(key: key);
+    required this.gambar,
+    required this.detailreport,
+    required this.tglpublish,
+    required this.rating,
+    required this.onclick,}) : super(key: key);
 
   @override
   _ItemSelesaiScreenState createState() => _ItemSelesaiScreenState();
@@ -32,7 +32,7 @@ class _ItemSelesaiScreenState extends State<ItemSelesaiScreen> {
         decoration: BoxDecoration(
             border: Border.all(color: Colors.blue),
             borderRadius: BorderRadius.circular(10),
-            color: Colors.blue.shade100),
+            color: Colors.blue.shade50),
         child: Row(
           children: [
             Container(
@@ -65,13 +65,16 @@ class _ItemSelesaiScreenState extends State<ItemSelesaiScreen> {
                     ),
                     Padding(padding: EdgeInsets.only(top: 10)),
                     Expanded(
-                      child: RichText(
-                        maxLines: 5,
-                        overflow: TextOverflow.ellipsis,
-                        strutStyle: StrutStyle(fontSize: 15.0),
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            text: widget.detailreport
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: RichText(
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
+                          strutStyle: StrutStyle(fontSize: 15.0),
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              text: widget.detailreport
+                          ),
                         ),
                       ),
                     ),
@@ -79,7 +82,7 @@ class _ItemSelesaiScreenState extends State<ItemSelesaiScreen> {
                       padding: EdgeInsets.only(top: 30),
                     ),
                     Align(
-                      alignment: Alignment.bottomLeft,
+                      alignment: Alignment.bottomRight,
                       child: Text(widget.tglpublish,
                         style: TextStyle(
                             fontSize: 15,
