@@ -5,16 +5,12 @@ class ItemListTask extends StatefulWidget {
   final Image gambar;
   final String detailreport;
   final String? tglpublish;
-  final String? latitude;
-  final String? longitude;
   final Function()? onclick;
 
   const ItemListTask({Key? key,
     required this.gambar,
     required this.detailreport,
     this.tglpublish,
-    this.latitude,
-    this.longitude,
     this.onclick}) :
         super(key: key);
 
@@ -65,7 +61,7 @@ class _ItemListTaskState extends State<ItemListTask> {
                       padding: EdgeInsets.only(top: 30),
                     ),
                     Align(
-                      alignment: Alignment.bottomLeft,
+                      alignment: Alignment.bottomRight,
                       child: Text("${widget.tglpublish}",
                         style: TextStyle(
                             fontSize: 15,
