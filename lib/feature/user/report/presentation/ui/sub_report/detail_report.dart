@@ -201,7 +201,7 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                           builder: (_) => imageDialog()
                       );
                     },
-                    child: Text("See Image", style: TextStyle(color: Colors.blue),),
+                    child: Text("See Details", style: TextStyle(color: Colors.blue),),
                   )
                 ],
               )
