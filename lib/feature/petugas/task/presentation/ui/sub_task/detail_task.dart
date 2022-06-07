@@ -17,8 +17,17 @@ class DetailTaskScreen extends StatefulWidget {
   final Image? gambar;
   final String? deskripsireport;
   final String? tglpublish;
+  final String? latitude;
+  final String? longitude;
+  final String? id;
 
-  const DetailTaskScreen({Key? key, this.gambar, this.deskripsireport, this.tglpublish}) : super(key: key);
+  const DetailTaskScreen({Key? key,
+    this.gambar,
+    this.deskripsireport,
+    this.tglpublish,
+    this.latitude,
+    this.longitude,
+    this.id}) : super(key: key);
 
   @override
   _DetailTaskScreenState createState() => _DetailTaskScreenState();
@@ -80,25 +89,51 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                   Padding(padding: EdgeInsets.only(top: 10),),
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.blue.shade100
+                        color: Colors.blue.shade200
                     ),
                     padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                          widget.tglpublish!,
-                          style: TextStyle(
-                              color: Colors.black38)),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade100
-                    ),
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    child: Text(
-                        widget.deskripsireport!,
-                        style: TextStyle(fontSize: 16)),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('Tanggal Publish${widget.tglpublish!}', style: TextStyle(color: Colors.black38)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Detail Report", style: TextStyle(fontSize: 18)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                              widget.deskripsireport!,
+                              style: TextStyle(fontSize: 16)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Lokasi", style: TextStyle(fontSize: 18)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 5),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Latitude : ${widget.latitude}"),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Longitude : ${widget.longitude}"),
+                        ),
+                      ],
+                    )
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 20),
@@ -149,7 +184,7 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                             builder: (_) => imageDialog()
                         );
                       },
-                      child: Text("See Image", style: TextStyle(color: Colors.blue),),
+                      child: Text("See Details", style: TextStyle(color: Colors.blue),),
                     )
                   ],
                 )
