@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skripsi_residencereport/feature/petugas/task/presentation/ui/sub_task/update_task_form.dart';
 
 final List<String> imgList = [
@@ -15,7 +19,7 @@ final List<String> imgList = [
 class DetailTaskScreen extends StatefulWidget {
 
   final Image? gambar;
-  final String? deskripsireport;
+  final String? detailreport;
   final String? tglpublish;
   final String? latitude;
   final String? longitude;
@@ -23,7 +27,7 @@ class DetailTaskScreen extends StatefulWidget {
 
   const DetailTaskScreen({Key? key,
     this.gambar,
-    this.deskripsireport,
+    this.detailreport,
     this.tglpublish,
     this.latitude,
     this.longitude,
@@ -35,41 +39,45 @@ class DetailTaskScreen extends StatefulWidget {
 
 class _DetailTaskScreenState extends State<DetailTaskScreen> {
 
-  final List _listDetailTask = [
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 1',
-      'subtitle_activity' : 'sub activity 1',
-      'deskripsi' : 'Deskripsi Activity Satu'
-    },
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 2',
-      'subtitle_activity' : 'sub activity 2',
-      'deskripsi' : 'Deskripsi Activity Dua'
-    },
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 3',
-      'subtitle_activity' : 'sub activity 3',
-      'deskripsi' : 'Deskripsi Activity Tiga'
-    },
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 4',
-      'subtitle_activity' : 'sub activity 4',
-      'deskripsi' : 'Deskripsi Activity Empat'
-    },
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 5',
-      'subtitle_activity' : 'sub activity 5',
-      'deskripsi' : 'Deskripsi Activity Lima'
-    },
-  ];
+  var dio = Dio();
+  var _listDetailTask;
+  var prefs;
+
+  // 'tgl_update' : '7 Juni 2022',
+  // 'detail_update' : 'Deskripsi Activity Lima'
 
   StepperType _type = StepperType.vertical;
   int _index = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getPrefs();
+  }
+
+  void _getPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    _getDataTask();
+  }
+
+  void _getDataTask() async {
+    var formData = FormData.fromMap({
+      'id_report': 4,
+    });
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiTask/get_task_by_idreport',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listDetailTask = jsonDecode(response.data);
+      });
+      print('DATA DATA $_listDetailTask');
+    }else{
+      print('Failed');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,52 +96,50 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                   ),
                   Padding(padding: EdgeInsets.only(top: 10),),
                   Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade200
-                    ),
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text('Tanggal Publish${widget.tglpublish!}', style: TextStyle(color: Colors.black38)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text("Detail Report", style: TextStyle(fontSize: 18)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 5),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                              widget.deskripsireport!,
-                              style: TextStyle(fontSize: 16)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text("Lokasi", style: TextStyle(fontSize: 18)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 5),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text("Latitude : ${widget.latitude}"),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text("Longitude : ${widget.longitude}"),
-                        ),
-                      ],
-                    )
+                      decoration: BoxDecoration(
+                          color: Colors.blue.shade200
+                      ),
+                      padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text('Tanggal Publish${widget.tglpublish!}', style: TextStyle(color: Colors.black38)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("Detail Report", style: TextStyle(fontSize: 18)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 5),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(widget.detailreport!, style: TextStyle(fontSize: 16)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("Lokasi", style: TextStyle(fontSize: 18)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("Latitude : ${widget.latitude}"),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("Longitude : ${widget.longitude}"),
+                          ),
+                        ],
+                      )
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 20),
@@ -165,23 +171,22 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
         steps: _listDetailTask.map((e) =>
             EnhanceStep(
                 icon: Icon(
-                  _index == _listDetailTask.indexOf(e) ? _listDetailTask[_listDetailTask.indexOf(e)]['icon'] : Icons.adjust_rounded,
+                  _index == _listDetailTask.indexOf(e) ? Icons.check_circle_outline : Icons.adjust_rounded,
                   color: _index == _listDetailTask.indexOf(e) ? Colors.blue : Colors.grey,
                 ),
                 isActive: _index == _listDetailTask.indexOf(e),
-                title: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['title_activity']}"),
-                subtitle: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['subtitle_activity']}"),
+                title: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['tgl_update']}"),
                 content: Row(
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['deskripsi']}. ", textAlign: TextAlign.left)
+                        child: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
                     ),
                     GestureDetector(
                       onTap: () async {
                         await showDialog(
                             context: context,
-                            builder: (_) => imageDialog()
+                            builder: (_) => taskDialog()
                         );
                       },
                       child: Text("See Details", style: TextStyle(color: Colors.blue),),
@@ -252,16 +257,71 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
     }
   }
 
-  Widget imageDialog() {
+  Widget taskDialog() {
     return Dialog(
-      child: CarouselSlider(
-        options: CarouselOptions(),
-        items: imgList.map((item) => Container(
-          child: Center(
-              child: Image.network(item, fit: BoxFit.cover, width: 900)
+      backgroundColor: Colors.transparent,
+      child: _listDetailTask.map((e) => Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
           ),
-        )).toList(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CarouselSlider(
+                options: CarouselOptions(),
+                items: imgList.map((item) => Container(
+                  child: Center(
+                      child: Image.network(item, fit: BoxFit.cover, width: 900)
+                  ),
+                )).toList(),
+              ),
+              Container(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 15),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Tanggal Update ${_listDetailTask[_listDetailTask.indexOf(e)]['tgl_update']}", style: TextStyle(color: Colors.black38)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Detail Update", style: TextStyle(fontSize: 18)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['detail_update']}.", style: TextStyle(fontSize: 16)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Lokasi", style: TextStyle(fontSize: 18)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 5),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Latitude : ${_listDetailTask[_listDetailTask.indexOf(e)]['lat']}"),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Longitude : ${_listDetailTask[_listDetailTask.indexOf(e)]['lng']}"),
+                      ),
+                    ],
+                  )
+              ),
+          ]),
       ),
+      )
     );
   }
 

@@ -27,10 +27,10 @@ class _TaskScreenState extends State<TaskScreen> {
 
   void _getPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    _getDataTask();
+    _getDataReportTask();
   }
 
-  void _getDataTask() async {
+  void _getDataReportTask() async {
     var formData = FormData.fromMap({
       'id_petugas': prefs.getString('id'),
     });
@@ -57,13 +57,15 @@ class _TaskScreenState extends State<TaskScreen> {
       body: Container(
         padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
         height: double.infinity,
-        child: _listItemTask != null ? ListView.builder(
+        child: _listItemTask != null
+            ?
+        ListView.builder(
           itemCount: _listItemTask!.length,
           itemBuilder: (context, int index){
-            final String _id = _listItemTask![index]['id_report'];
-            final Image _image = Image.asset(_listItemTask![index]['gambar']);
-            final String _detailreport = _listItemTask![index]['detailreport'];
-            final String _tglpublish = _listItemTask![index]['tglpublish'];
+            final String _id = _listItemTask![index]['id'];
+            final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemTask![index]['img']);
+            final String _detailreport = _listItemTask![index]['deskripsi'];
+            final String _tglpublish = _listItemTask![index]['tanggal_dibuat'];
             final String _latitude = _listItemTask![index]['lat'];
             final String _longitude = _listItemTask![index]['lng'];
             return Padding(
@@ -76,7 +78,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailTaskScreen(
                     id: _id,
                     gambar: _image,
-                    deskripsireport: _detailreport,
+                    detailreport: _detailreport,
                     tglpublish: _tglpublish,
                     latitude: _latitude,
                     longitude: _longitude,
@@ -86,7 +88,8 @@ class _TaskScreenState extends State<TaskScreen> {
             );
           },
         )
-            : Container(),
+            :
+        Container(),
       ),
     );
   }

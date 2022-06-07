@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InboxScreen extends StatefulWidget {
 
@@ -8,17 +12,47 @@ class InboxScreen extends StatefulWidget {
 
 class _InboxScreenState extends State<InboxScreen> {
 
-  List _listPaketUser = [
-    {
-      'username' : 'Zakiah',
-      'no_resi' : 'TKP00021290908',
-      'nama_penerima' : 'Fandi Sujatmiko',
-      'no_handphone' : '081260006443',
-      'alamat' : 'Perumahan Graha Indah Blok 3 No.24',
-      'pengirim' : 'Grand Royale Petshop',
-      'jasa_pengiriman' : "SiCepat"
+  var dio = Dio();
+  var _listPaketUser;
+  var prefs;
+
+  // 'username' : 'Zakiah',
+  // 'no_resi' : 'TKP00021290908',
+  // 'nama_penerima' : 'Fandi Sujatmiko',
+  // 'no_handphone' : '081260006443',
+  // 'alamat' : 'Perumahan Graha Indah Blok 3 No.24',
+  // 'pengirim' : 'Grand Royale Petshop',
+  // 'jasa_pengiriman' : "SiCepat"
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getPrefs();
+  }
+
+  void _getPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    _getDataPaket();
+  }
+
+  void _getDataPaket() async {
+    var formData = FormData.fromMap({
+      'id_user': prefs.getString('id'),
+    });
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiTask/get_task_by_idreport',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listPaketUser = jsonDecode(response.data);
+      });
+      print(_listPaketUser);
+    }else{
+      print('Failed');
     }
-  ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,9 +223,9 @@ class _InboxScreenState extends State<InboxScreen> {
                       );
                     },
                     child: Text("Selengkapnya tentang paket anda",
-                    style: TextStyle(
-                      color: Colors.blue
-                    ),),
+                      style: TextStyle(
+                          color: Colors.blue
+                      ),),
                   ),
                 ),
               ],

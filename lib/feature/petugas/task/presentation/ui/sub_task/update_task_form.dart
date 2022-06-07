@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import 'package:skripsi_residencereport/feature/petugas/task/presentation/ui/sub_task/detail_task.dart';
 
 class UpdateTaskForm extends StatefulWidget {
   const UpdateTaskForm({Key? key}) : super(key: key);
@@ -15,13 +17,16 @@ class UpdateTaskForm extends StatefulWidget {
 class _UpdateTaskFormState extends State<UpdateTaskForm> {
 
   var date = DateFormat('dd MMM yyyy').format(DateTime.now());
-
+  var dio = Dio();
   final ImagePicker _picker = ImagePicker();
   XFile? pickedFile;
   XFile? imagePickedFile;
   LocationData? _userLocation;
   Location location = Location();
   bool showLoad = false;
+  TextEditingController detailTask = new TextEditingController();
+  bool _showLoading = false;
+  String msg_error = '';
 
   @override
   void initState() {
@@ -88,13 +93,14 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
                   ),
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Text("Detail", style: TextStyle(fontSize: 20)),
+                    child: Text("Detail Update", style: TextStyle(fontSize: 20)),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
                   Expanded(
                     child: TextFormField(
+                      controller: detailTask,
                       maxLines: 8,
                       decoration: InputDecoration(
                         labelText: "Input Detail Update",
@@ -162,9 +168,10 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
               child: MaterialButton(
                 color: Colors.blue,
                 onPressed: (){
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => DetailTaskScreen())
-                  );
+                  setState(() {
+                    _showLoading = true;
+                  });
+                  _addTask(imagePickedFile, date ,detailTask.text, '${_userLocation?.latitude}', '${_userLocation?.longitude}');
                 },
                 shape: RoundedRectangleBorder(
                     side: BorderSide(
@@ -204,5 +211,60 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
     setState(() {
       imagePickedFile = pickedFile;
     });
+  }
+
+  void _addTask(XFile? imagePickedFile, String date, String detailTask, String latitude, String longitude) async {
+
+    if(imagePickedFile == null){
+      setState(() {
+        _showLoading = false;
+        msg_error = "Image tidak boleh kosong";
+      });
+    }
+    else if (detailTask == ''){
+      setState(() {
+        _showLoading = false;
+        msg_error = "Detail Report harus diisi";
+      });
+    }else {
+      dio.options.headers = {
+        'Content-Type': 'application/form-data'
+      };
+    }
+
+    var formData = FormData.fromMap({
+      'tgl_update': date,
+      'image_task': await MultipartFile.fromFile(imagePickedFile!.path, filename: 'upload.jpg'),
+      'detail_update': detailTask,
+      'lat': latitude,
+      'lng': longitude,
+    });
+
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiTask/add_task',
+        data: formData
+    );
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.data);
+      if (data['status_message'] == 'success') {
+        await CoolAlert.show(
+            context: context,
+            type: CoolAlertType.success,
+            text: '${data['message']}',
+            autoCloseDuration: const Duration(seconds: 10),
+            confirmBtnText: 'Ok!',
+            onConfirmBtnTap: (){}
+        );
+
+        Navigator.pushReplacementNamed(context, '/detailtask');
+
+      }else{
+        setState(() {
+          _showLoading = false;
+          msg_error = "Maaf, system sedang error";
+        });
+      }
+    }
   }
 }

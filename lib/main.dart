@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skripsi_residencereport/feature/authentication/presentation/ui/login_screen.dart';
 import 'package:skripsi_residencereport/feature/petugas/home_pet/presentation/ui/home_screen_pet.dart';
+import 'package:skripsi_residencereport/feature/petugas/task/presentation/ui/sub_task/detail_task.dart';
 import 'package:skripsi_residencereport/feature/splash/presentation/bloc/splash_bloc.dart';
 import 'package:skripsi_residencereport/feature/splash/presentation/ui/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => HomeScreen(),
           '/homepetugas': (context) => HomeScreenPet(),
           '/myreport': (context) => MyReportScreen(),
+          '/detailtask': (context) => DetailTaskScreen(),
         },
       ),
     );
