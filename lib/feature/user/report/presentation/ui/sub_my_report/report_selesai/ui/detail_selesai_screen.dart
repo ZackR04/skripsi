@@ -190,7 +190,7 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                             builder: (_) => imageDialog()
                         );
                       },
-                      child: Text("See Image", style: TextStyle(color: Colors.blue),),
+                      child: Text("See Details", style: TextStyle(color: Colors.blue),),
                     )
                   ],
                 )
