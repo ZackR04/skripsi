@@ -1,29 +1,29 @@
+import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
-
-final List<String> imgList = [
-  'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-  'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-  'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-  'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
-];
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailHistoryTask extends StatefulWidget {
 
   final Image? gambar;
-  final String? deskripsireport;
+  final String? detailreport;
   final String? tglpublish;
+  final String? latitude;
+  final String? longitude;
+  final String? id;
   final double rating;
 
   const DetailHistoryTask({Key? key,
     this.gambar,
-    this.deskripsireport,
+    this.detailreport,
     this.tglpublish,
-    required this.rating}) : super(key: key);
+    this.latitude,
+    this.longitude,
+    this.id,
+    required this.rating,}) : super(key: key);
 
   @override
   _DetailHistoryTaskState createState() => _DetailHistoryTaskState();
@@ -31,41 +31,41 @@ class DetailHistoryTask extends StatefulWidget {
 
 class _DetailHistoryTaskState extends State<DetailHistoryTask> {
 
-  final List _listDetailHistoryTask= [
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 1',
-      'subtitle_activity' : 'sub activity 1',
-      'deskripsi' : 'Deskripsi Activity Satu'
-    },
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 2',
-      'subtitle_activity' : 'sub activity 2',
-      'deskripsi' : 'Deskripsi Activity Dua'
-    },
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 3',
-      'subtitle_activity' : 'sub activity 3',
-      'deskripsi' : 'Deskripsi Activity Tiga'
-    },
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 4',
-      'subtitle_activity' : 'sub activity 4',
-      'deskripsi' : 'Deskripsi Activity Empat'
-    },
-    {
-      'icon' : Icons.check_circle_outline,
-      'title_activity' : 'Activity 5',
-      'subtitle_activity' : 'sub activity 5',
-      'deskripsi' : 'Deskripsi Activity Lima'
-    },
-  ];
+  var dio =  Dio();
+  var _listDetailHistoryTask;
+  var prefs;
 
   StepperType _type = StepperType.vertical;
   int _index = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getPrefs();
+  }
+
+  void _getPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    _getDataHistoryTask();
+  }
+
+  void _getDataHistoryTask() async {
+    var formData = FormData.fromMap({
+      'id_report': widget.id,
+    });
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiTask/get_task_by_idreport',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      setState(() {
+        _listDetailHistoryTask = jsonDecode(response.data);
+      });
+    }else{
+      print('Failed');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,50 +85,72 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
                   Padding(padding: EdgeInsets.only(top: 10),),
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.blue.shade100
+                        color: Colors.blue.shade200
                     ),
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                          widget.tglpublish!,
-                          style: TextStyle(
-                              color: Colors.black38)),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade100
-                    ),
-                    child: Center(
-                      child: RatingStars(
-                        value: widget.rating,
-                        starBuilder: (index, color) => Icon(
-                          Icons.star,
-                          color: color,
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                    child: Column(
+                      children: [
+                        Center(
+                          child: RatingStars(
+                            value: widget.rating,
+                            starBuilder: (index, color) => Icon(
+                              Icons.star,
+                              color: color,
+                            ),
+                            starCount: 5,
+                            starSize: 40,
+                            starSpacing: 0,
+                            valueLabelVisibility: false,
+                            starColor: Colors.yellow,
+                          ),
                         ),
-                        starCount: 5,
-                        starSize: 40,
-                        starSpacing: 0,
-                        valueLabelVisibility: false,
-                        starColor: Colors.yellow,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade100
-                    ),
-                    padding: EdgeInsets.only(left: 20, top: 5,right: 20, bottom: 10),
-                    child: Text(
-                        widget.deskripsireport!,
-                        style: TextStyle(fontSize: 16)),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('Tanggal Publish ${widget.tglpublish!}', style: TextStyle(color: Colors.black38)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Detail Report", style: TextStyle(fontSize: 18)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(widget.detailreport!, style: TextStyle(fontSize: 16)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Lokasi", style: TextStyle(fontSize: 18)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 5),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Latitude : ${widget.latitude}"),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Longitude : ${widget.longitude}"),
+                        ),
+                      ],
+                    )
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 20),
                   ),
                   Expanded(
-                      child: buildStepper(context)
+                      child: _listDetailHistoryTask.isEmpty ? Container() : buildStepper(context)
                   ),
                 ],
               )
@@ -146,144 +168,206 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
         steps: _listDetailHistoryTask.map((e) =>
             EnhanceStep(
                 icon: Icon(
-                  _index == _listDetailHistoryTask.indexOf(e) ? _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['icon'] : Icons.adjust_rounded,
+                  _index == _listDetailHistoryTask.indexOf(e) ? Icons.check_circle_outline : Icons.adjust_rounded,
                   color: _index == _listDetailHistoryTask.indexOf(e) ? Colors.blue : Colors.grey,
                 ),
                 isActive: _index == _listDetailHistoryTask.indexOf(e),
-                title: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['title_activity']}"),
-                subtitle: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['subtitle_activity']}"),
+                title: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['tgl_update']}"),
                 content: Row(
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['deskripsi']}. ", textAlign: TextAlign.left)
+                        child: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
                     ),
                     GestureDetector(
                       onTap: () async {
                         await showDialog(
                             context: context,
-                            builder: (_) => imageDialog()
+                            builder: (_) => historytaskDialog(
+                              _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['img'],
+                              _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['tgl_update'],
+                              _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['detail_update'],
+                              _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lat'],
+                              _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lng'],
+                            )
                         );
                       },
-                      child: Text("See Image", style: TextStyle(color: Colors.blue),),
+                      child: Text("See Details", style: TextStyle(color: Colors.blue),),
                     )
                   ],
                 )
             )
         ).toList(),
-        onStepCancel: () {
-          back();
-        },
-        onStepContinue: () {
-          next();
-        },
+        // onStepCancel: () {
+        //   back();
+        // },
+        // onStepContinue: () {
+        //   next();
+        // },
         onStepTapped: (index) {
           setState(() {
             _index = index;
           });
         },
         controlsBuilder: (BuildContext context, ControlsDetails details) {
-          return Container(
-            padding: EdgeInsets.only(top: 30),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: 30,
-                ),
-                _index < _listDetailHistoryTask.length-1
-                    ?
-                TextButton(
-                  onPressed: details.onStepContinue,
-                  child: Text("Next"),
-                )
-                    :
-                SizedBox(
-                  width: 8,
-                ),
-                _index == 0
-                    ?
-                Container()
-                    :
-                TextButton(
-                  onPressed: details.onStepCancel,
-                  child: Text("Back", style: TextStyle(color: Colors.red),),
-                ),
-              ],
-            ),
-          );
+          return Container();
+          //   padding: EdgeInsets.only(top: 30),
+          //   child: Row(
+          //     children: [
+          //       SizedBox(
+          //         height: 30,
+          //       ),
+          //       _index < _listDetailHistoryTask.length-1
+          //           ?
+          //       TextButton(
+          //         onPressed: details.onStepContinue,
+          //         child: Text("Next"),
+          //       )
+          //           :
+          //       SizedBox(
+          //         width: 8,
+          //       ),
+          //       _index == 0
+          //           ?
+          //       Container()
+          //           :
+          //       TextButton(
+          //         onPressed: details.onStepCancel,
+          //         child: Text("Back", style: TextStyle(color: Colors.red),),
+          //       ),
+          //     ],
+          //   ),
+          // );
         });
   }
 
-  void back() {
-    if (_index > 0) {
-      setState(() {
-        _index--;
-      });
-      return;
-    }
-  }
+  // void back() {
+  //   if (_index > 0) {
+  //     setState(() {
+  //       _index--;
+  //     });
+  //     return;
+  //   }
+  // }
+  //
+  // void next() {
+  //   if (_index < _listDetailHistoryTask.length-1) {
+  //     setState(() {
+  //       _index++;
+  //     });
+  //     return;
+  //   }
+  // }
 
-  void next() {
-    if (_index < _listDetailHistoryTask.length-1) {
-      setState(() {
-        _index++;
-      });
-      return;
-    }
-  }
-
-  Widget imageDialog() {
+  Widget historytaskDialog(String img, String tgl_update, String detail_update, String latitude, String longitude) {
     return Dialog(
-      child: CarouselSlider(
-        options: CarouselOptions(),
-        items: imgList.map((item) => Container(
-          child: Center(
-              child: Image.network(item, fit: BoxFit.cover, width: 900)
-          ),
-        )).toList(),
+      backgroundColor: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CarouselSlider(
+                  options: CarouselOptions(),
+                  items: [
+                    Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Center(
+                          child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
+                      ),
+                    )
+                  ]
+              ),
+              Container(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 15),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Tanggal Update $tgl_update", style: TextStyle(color: Colors.black38)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Detail Update", style: TextStyle(fontSize: 18)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("$detail_update.", style: TextStyle(fontSize: 16)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Lokasi", style: TextStyle(fontSize: 18)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 5),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Latitude : $latitude"),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Longitude : $longitude"),
+                      ),
+                    ],
+                  )
+              ),
+            ]),
       ),
     );
   }
 
-  final List<Widget> imageSliders = imgList
-      .map((item) => Container(
-    child: Container(
-      margin: EdgeInsets.all(5.0),
-      child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          child: Stack(
-            children: <Widget>[
-              Image.network(item, fit: BoxFit.cover, width: 1000.0),
-              Positioned(
-                bottom: 0.0,
-                left: 0.0,
-                right: 0.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color.fromARGB(200, 0, 0, 0),
-                        Color.fromARGB(0, 0, 0, 0)
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 20.0),
-                  child: Text(
-                    'No. ${imgList.indexOf(item)} image',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )),
-    ),
-  ))
-      .toList();
+  // final List<Widget> imageSliders = imgList
+  //     .map((item) => Container(
+  //   child: Container(
+  //     margin: EdgeInsets.all(5.0),
+  //     child: ClipRRect(
+  //         borderRadius: BorderRadius.all(Radius.circular(5.0)),
+  //         child: Stack(
+  //           children: <Widget>[
+  //             Image.network(item, fit: BoxFit.cover, width: 1000.0),
+  //             Positioned(
+  //               bottom: 0.0,
+  //               left: 0.0,
+  //               right: 0.0,
+  //               child: Container(
+  //                 decoration: BoxDecoration(
+  //                   gradient: LinearGradient(
+  //                     colors: [
+  //                       Color.fromARGB(200, 0, 0, 0),
+  //                       Color.fromARGB(0, 0, 0, 0)
+  //                     ],
+  //                     begin: Alignment.bottomCenter,
+  //                     end: Alignment.topCenter,
+  //                   ),
+  //                 ),
+  //                 padding: EdgeInsets.symmetric(
+  //                     vertical: 10.0, horizontal: 20.0),
+  //                 child: Text(
+  //                   'No. ${imgList.indexOf(item)} image',
+  //                   style: TextStyle(
+  //                     color: Colors.white,
+  //                     fontSize: 20.0,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         )),
+  //   ),
+  // ))
+  //     .toList();
 }

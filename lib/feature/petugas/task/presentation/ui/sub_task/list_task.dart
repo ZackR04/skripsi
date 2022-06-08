@@ -33,6 +33,8 @@ class _TaskScreenState extends State<TaskScreen> {
   void _getDataReportTask() async {
     var formData = FormData.fromMap({
       'id_petugas': prefs.getString('id'),
+      'status_report': 2,
+
     });
     final response = await dio.post(
       'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/get_report_for_petugas',

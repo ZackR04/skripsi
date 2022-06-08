@@ -16,14 +16,6 @@ class _InboxScreenState extends State<InboxScreen> {
   var _listPaketUser;
   var prefs;
 
-  // 'username' : 'Zakiah',
-  // 'no_resi' : 'TKP00021290908',
-  // 'nama_penerima' : 'Fandi Sujatmiko',
-  // 'no_handphone' : '081260006443',
-  // 'alamat' : 'Perumahan Graha Indah Blok 3 No.24',
-  // 'pengirim' : 'Grand Royale Petshop',
-  // 'jasa_pengiriman' : "SiCepat"
-
   @override
   void initState() {
     // TODO: implement initState
@@ -61,7 +53,7 @@ class _InboxScreenState extends State<InboxScreen> {
       appBar: AppBar(
         title: Text("Inbox"),
       ),
-      body: Column(
+      body: _listPaketUser.isEmpty ? Container() : Column(
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(padding: EdgeInsets.only(top: 10)),
@@ -75,7 +67,7 @@ class _InboxScreenState extends State<InboxScreen> {
                   color: Colors.blue.shade100,
                   borderRadius: BorderRadius.circular(10)
               ),
-              child: Text("11 Maret",
+              child: Text("${_listPaketUser[_listPaketUser]['dateInbox']}",
                 style: TextStyle(fontSize: 15),
               ),
             ),
@@ -102,8 +94,8 @@ class _InboxScreenState extends State<InboxScreen> {
                     ),
                     padding: EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 15),
                     child: _buildInbox(
-                        _listPaketUser[0]['username'],
-                        _listPaketUser[0]['no_resi']
+                        _listPaketUser[_listPaketUser]['username'],
+                        _listPaketUser[_listPaketUser]['no_resi']
                     )),
                 Container(
                   height: 0.5,
@@ -115,111 +107,14 @@ class _InboxScreenState extends State<InboxScreen> {
                     onPressed: (){
                       showDialog(
                           context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              backgroundColor: Colors.transparent,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10)
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 15),
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Icon(Icons.info_outline, size: 35,),
-                                                  Padding(padding: EdgeInsets.only(left: 5)),
-                                                  Text("Informasi Paket Anda", style:
-                                                  TextStyle(fontSize: 15)),
-                                                ],
-                                              ),
-                                              Padding(padding: EdgeInsets.only(top: 20),),
-                                              Row(
-                                                children: [
-                                                  Text("No. Resi", style:
-                                                  TextStyle(fontSize: 15)),
-                                                  Padding(padding: EdgeInsets.only(left: 5)),
-                                                  Text(_listPaketUser[0]['no_resi'],
-                                                    style: TextStyle(color: Colors.blue, fontSize: 15),),
-                                                ],
-                                              ),
-                                              Padding(padding: EdgeInsets.only(top: 7),),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text("Nama Penerima",
-                                                    style: TextStyle(fontSize: 15)),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(left: 5)),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(_listPaketUser[0]['nama_penerima'],
-                                                  style: TextStyle(color: Colors.blue, fontSize: 15),),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(top: 7),),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text("No. Handphone",
-                                                    style: TextStyle(fontSize: 15)),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(left: 5)),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(_listPaketUser[0]['no_handphone'],
-                                                  style: TextStyle(color: Colors.blue, fontSize: 15),),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(top: 7),),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text("Alamat",
-                                                    style: TextStyle(fontSize: 15)),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(left: 5)),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(_listPaketUser[0]['alamat'],
-                                                  style: TextStyle(color: Colors.blue, fontSize: 15),),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(top: 7),),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text("Pengirim",
-                                                    style: TextStyle(fontSize: 15)),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(left: 5)),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(_listPaketUser[0]['pengirim'],
-                                                  style: TextStyle(color: Colors.blue, fontSize: 15),),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(top: 7),),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text("Jasa Pengiriman",
-                                                    style: TextStyle(fontSize: 15)),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(left: 5)),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(_listPaketUser[0]['jasa_pengiriman'],
-                                                  style: TextStyle(color: Colors.blue, fontSize: 15),),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
+                          builder: (_) => paketDialog(
+                            _listPaketUser[_listPaketUser]['no_resi'],
+                            _listPaketUser[_listPaketUser]['nama_penerima'],
+                            _listPaketUser[_listPaketUser]['no_handphone'],
+                            _listPaketUser[_listPaketUser]['alamat'],
+                            _listPaketUser[_listPaketUser]['pengirim'],
+                            _listPaketUser[_listPaketUser]['jasa_pengiriman'],
+                          )
                       );
                     },
                     child: Text("Selengkapnya tentang paket anda",
@@ -239,4 +134,112 @@ class _InboxScreenState extends State<InboxScreen> {
   Widget _buildInbox(String username, String noResi) {
     return Text("Hai ${username}, paket anda dengan nomor resi ${noResi} telah sampai di pos kami. Silahkan ambil dan tunjukkan pesan ini kepada petugas kami. Terimakasih");
   }
+
+  Widget paketDialog(String noResi, String penerima, String noHp, String alamat, String pengirim, String jasaPengiriman) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: Stack(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 15),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.info_outline, size: 35,),
+                          Padding(padding: EdgeInsets.only(left: 5)),
+                          Text("Informasi Paket Anda", style:
+                          TextStyle(fontSize: 15)),
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 20),),
+                      Row(
+                        children: [
+                          Text("No. Resi", style:
+                          TextStyle(fontSize: 15)),
+                          Padding(padding: EdgeInsets.only(left: 5)),
+                          Text("${noResi}",
+                            style: TextStyle(color: Colors.blue, fontSize: 15),),
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 7),),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Nama Penerima",
+                            style: TextStyle(fontSize: 15)),
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 5)),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("${penerima}",
+                          style: TextStyle(color: Colors.blue, fontSize: 15),),
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 7),),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("No. Handphone",
+                            style: TextStyle(fontSize: 15)),
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 5)),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("${noHp}",
+                          style: TextStyle(color: Colors.blue, fontSize: 15),),
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 7),),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Alamat",
+                            style: TextStyle(fontSize: 15)),
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 5)),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("${alamat}",
+                          style: TextStyle(color: Colors.blue, fontSize: 15),),
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 7),),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Pengirim",
+                            style: TextStyle(fontSize: 15)),
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 5)),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("${pengirim}",
+                          style: TextStyle(color: Colors.blue, fontSize: 15),),
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 7),),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Jasa Pengiriman",
+                            style: TextStyle(fontSize: 15)),
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 5)),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("${jasaPengiriman}",
+                          style: TextStyle(color: Colors.blue, fontSize: 15),),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }
