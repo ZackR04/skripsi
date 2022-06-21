@@ -5,6 +5,7 @@ import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skripsi_residencereport/feature/petugas/task/presentation/ui/sub_task/update_task_form.dart';
+import 'package:geocoding/geocoding.dart';
 
 class DetailTaskScreen extends StatefulWidget {
 
@@ -32,6 +33,10 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
   var dio = Dio();
   var _listDetailTask = [];
   var prefs;
+  String alamat = '';
+  String lat = '';
+  String lng = '';
+  bool showLoad = false;
 
   StepperType _type = StepperType.vertical;
   int _index = 0;
@@ -41,6 +46,17 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
     // TODO: implement initState
     super.initState();
     _getPrefs();
+    lat = widget.latitude ?? '';
+    lng = widget.longitude ?? '';
+    _firstlocation(lat, lng);
+  }
+
+  void _firstlocation(String lat, String lng) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(double.parse(lat), double.parse(lng));
+    setState(() {
+      alamat = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+      showLoad = false;
+    });
   }
 
   void _getPrefs() async {
@@ -118,11 +134,7 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                           ),
                           Align(
                             alignment: Alignment.topLeft,
-                            child: Text("Latitude : ${widget.latitude}"),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text("Longitude : ${widget.longitude}"),
+                            child: Text(alamat),
                           ),
                         ],
                       )

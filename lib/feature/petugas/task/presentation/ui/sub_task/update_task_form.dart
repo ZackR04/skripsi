@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:geocoding/geocoding.dart' as geoloc;
 
 class UpdateTaskForm extends StatefulWidget {
   const UpdateTaskForm({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
 
   var date = DateFormat('dd MMM yyyy').format(DateTime.now());
   var dio = Dio();
+  var address = '';
   final ImagePicker _picker = ImagePicker();
   XFile? pickedFile;
   XFile? imagePickedFile;
@@ -27,6 +29,7 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
   TextEditingController detailTask = new TextEditingController();
   bool _showLoading = false;
   String msg_error = '';
+  String alamat = '';
 
   @override
   void initState() {
@@ -129,9 +132,8 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
             ),
             Container(
               width: double.infinity,
-              height: 105,
               color: Colors.white,
-              padding: EdgeInsets.only(left: 15, right: 20),
+              padding: EdgeInsets.only(left: 15, right: 20, top: 5),
               child: Column(
                 children: [
                   Align(
@@ -142,10 +144,10 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
                     child: showLoad == true ? const CircularProgressIndicator() : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Latitude: ${_userLocation?.latitude ?? "-" }', style:
-                        TextStyle(fontSize: 15),),
-                        Text('Longitude: ${_userLocation?.longitude ?? "-" }', style:
-                        TextStyle(fontSize: 15),),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Text(alamat, style: TextStyle(fontSize: 17),),
                         MaterialButton(
                           onPressed: (){
                             _getLocation();
@@ -197,10 +199,14 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
       showLoad = true;
     });
     final _locationData = await location.getLocation();
-    setState(() {
-      _userLocation = _locationData;
-      showLoad = false;
-    });
+    if(_locationData != null){
+      List<geoloc.Placemark> placemarks = await geoloc.placemarkFromCoordinates(_locationData.latitude!, _locationData.longitude!);
+      setState(() {
+        _userLocation = _locationData;
+        alamat = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+        showLoad = false;
+      });
+    }
   }
 
   void _onImageButtonPressed() async {

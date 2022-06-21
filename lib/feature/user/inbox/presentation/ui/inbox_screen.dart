@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InboxScreen extends StatefulWidget {
@@ -31,9 +31,10 @@ class _InboxScreenState extends State<InboxScreen> {
   void _getDataPaket() async {
     var formData = FormData.fromMap({
       'id_user': prefs.getString('id'),
+      'status_pick': 0,
     });
     final response = await dio.post(
-        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiTask/get_task_by_idreport',
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiPaket/get_inbox_paket',
         data: formData
     );
     if(response.statusCode == 200){
@@ -53,81 +54,86 @@ class _InboxScreenState extends State<InboxScreen> {
       appBar: AppBar(
         title: Text("Inbox"),
       ),
-      body: _listPaketUser.isEmpty ? Container() : Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(padding: EdgeInsets.only(top: 10)),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              width: 100,
-              padding: EdgeInsets.only(top: 5, bottom:5),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Colors.blue.shade100,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Text("${_listPaketUser[_listPaketUser]['dateInbox']}",
-                style: TextStyle(fontSize: 15),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 15),
-          ),
-          Container(
-            margin: EdgeInsets.only(left:10, right: 50),
-            // padding: EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 15),
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(10)
-            ),
-            child: Column(
+      body: _listPaketUser.isEmpty ? Container() :
+      ListView.builder(
+          itemCount: _listPaketUser!.length,
+          itemBuilder: (context, int index){
+            return Column(
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                Padding(padding: EdgeInsets.only(top: 10)),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    width: 100,
+                    padding: EdgeInsets.only(top: 5, bottom:5),
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          topLeft: Radius.circular(10),
-                        )
+                        color: Colors.blue.shade100,
+                        borderRadius: BorderRadius.circular(10)
                     ),
-                    padding: EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 15),
-                    child: _buildInbox(
-                        _listPaketUser[_listPaketUser]['username'],
-                        _listPaketUser[_listPaketUser]['no_resi']
-                    )),
-                Container(
-                  height: 0.5,
-                  color: Colors.grey,
+                    child: Text("${DateFormat('dd MMM yyyy').format(DateTime.parse(_listPaketUser[index]['dateInbox']))}",
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 15),
                 ),
                 Container(
-                  width: double.infinity,
-                  child: MaterialButton(
-                    onPressed: (){
-                      showDialog(
-                          context: context,
-                          builder: (_) => paketDialog(
-                            _listPaketUser[_listPaketUser]['no_resi'],
-                            _listPaketUser[_listPaketUser]['nama_penerima'],
-                            _listPaketUser[_listPaketUser]['no_handphone'],
-                            _listPaketUser[_listPaketUser]['alamat'],
-                            _listPaketUser[_listPaketUser]['pengirim'],
-                            _listPaketUser[_listPaketUser]['jasa_pengiriman'],
-                          )
-                      );
-                    },
-                    child: Text("Selengkapnya tentang paket anda",
-                      style: TextStyle(
-                          color: Colors.blue
-                      ),),
+                  margin: EdgeInsets.only(left:10, right: 50),
+                  // padding: EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 15),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                topLeft: Radius.circular(10),
+                              )
+                          ),
+                          padding: EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 15),
+                          child: _buildInbox(
+                              prefs.getString('username'),
+                              _listPaketUser[index]['no_resi']
+                          )),
+                      Container(
+                        height: 0.5,
+                        color: Colors.grey,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: MaterialButton(
+                          onPressed: (){
+                            showDialog(
+                                context: context,
+                                builder: (_) => paketDialog(
+                                  _listPaketUser[index]['no_resi'],
+                                  _listPaketUser[index]['nama_penerima'],
+                                  _listPaketUser[index]['no_handphone'],
+                                  _listPaketUser[index]['alamat'],
+                                  _listPaketUser[index]['pengirim'],
+                                  _listPaketUser[index]['jasa_pengiriman'],
+                                )
+                            );
+                          },
+                          child: Text("Selengkapnya tentang paket anda",
+                            style: TextStyle(
+                                color: Colors.blue
+                            ),),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
+            );
+          })
     );
   }
 

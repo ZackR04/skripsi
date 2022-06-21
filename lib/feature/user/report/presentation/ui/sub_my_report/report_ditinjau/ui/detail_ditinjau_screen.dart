@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:skripsi_residencereport/feature/user/report/presentation/ui/sub_my_report/report_ditinjau/ui/form_editreport.dart';
 
 class DetailDitinjauScreen extends StatefulWidget {
@@ -34,6 +34,27 @@ class _DetailDitinjauScreenState extends State<DetailDitinjauScreen> {
   var dio = Dio();
   bool _showLoading = false;
   String msg_error = '';
+  String alamat = '';
+  String lat = '';
+  String lng = '';
+  bool showLoad = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    lat = widget.latitude ?? '';
+    lng = widget.longitude ?? '';
+    _firstlocation(lat, lng);
+  }
+
+  void _firstlocation(String lat, String lng) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(double.parse(lat), double.parse(lng));
+    setState(() {
+      alamat = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+      showLoad = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +124,7 @@ class _DetailDitinjauScreenState extends State<DetailDitinjauScreen> {
                         ),
                         Align(
                           alignment: Alignment.topLeft,
-                          child: Text("Latitude : ${widget.latitude}"),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text("Longitude : ${widget.longitude}"),
+                          child: Text(alamat),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 15),

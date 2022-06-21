@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailHistoryTask extends StatefulWidget {
@@ -34,6 +35,10 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
   var dio =  Dio();
   var _listDetailHistoryTask;
   var prefs;
+  String alamat = '';
+  String lat = '';
+  String lng = '';
+  bool showLoad = false;
 
   StepperType _type = StepperType.vertical;
   int _index = 0;
@@ -43,6 +48,17 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
     // TODO: implement initState
     super.initState();
     _getPrefs();
+    lat = widget.latitude ?? '';
+    lng = widget.longitude ?? '';
+    _firstlocation(lat, lng);
+  }
+
+  void _firstlocation(String lat, String lng) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(double.parse(lat), double.parse(lng));
+    setState(() {
+      alamat = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+      showLoad = false;
+    });
   }
 
   void _getPrefs() async {
@@ -137,11 +153,7 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
                         ),
                         Align(
                           alignment: Alignment.topLeft,
-                          child: Text("Latitude : ${widget.latitude}"),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text("Longitude : ${widget.longitude}"),
+                          child: Text(alamat),
                         ),
                       ],
                     )

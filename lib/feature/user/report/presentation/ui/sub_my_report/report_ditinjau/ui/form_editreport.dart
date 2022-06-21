@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geocoding/geocoding.dart' as geoloc;
 
 class EditReportScreen extends StatefulWidget {
 
@@ -43,6 +44,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
   var deskripsitext;
   bool showLoad = false;
   String msg_error = '';
+  String alamat = '';
 
   String lat = '';
   String lng = '';
@@ -51,8 +53,19 @@ class _EditReportScreenState extends State<EditReportScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    lat = widget.latitude ?? '';
+    lng = widget.longitude ?? '';
+    _firstlocation(lat, lng);
     deskripsitext = TextEditingController(text: widget.deskripsireport);
     setshowimage();
+  }
+
+  void _firstlocation(String lat, String lng) async {
+    List<geoloc.Placemark> placemarks = await geoloc.placemarkFromCoordinates(double.parse(lat), double.parse(lng));
+    setState(() {
+      alamat = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+      showLoad = false;
+    });
   }
 
   @override
@@ -148,7 +161,6 @@ class _EditReportScreenState extends State<EditReportScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 105,
               color: Colors.white,
               padding: EdgeInsets.only(left: 15, right: 20, top: 10),
               child: Column(
@@ -161,10 +173,14 @@ class _EditReportScreenState extends State<EditReportScreen> {
                     child: showLoad == true ? const CircularProgressIndicator() : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Latitude: ${lat == '' ? widget.latitude : lat}', style:
-                          TextStyle(fontSize: 15)),
-                        Text('Longitude: ${lng == '' ? widget.longitude : lng}', style:
-                        TextStyle(fontSize: 15)),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Text(alamat, style: TextStyle(fontSize: 17),),
+                        // Text('Latitude: ${lat == '' ? widget.latitude : lat}', style:
+                        //   TextStyle(fontSize: 15)),
+                        // Text('Longitude: ${lng == '' ? widget.longitude : lng}', style:
+                        // TextStyle(fontSize: 15)),
                         MaterialButton(
                           onPressed: (){
                             _getLocation();
@@ -226,12 +242,16 @@ class _EditReportScreenState extends State<EditReportScreen> {
       showLoad = true;
     });
     final _locationData = await location.getLocation();
-    setState(() {
-      _userLocation = _locationData;
-      lat = '${_userLocation?.latitude}';
-      lng = '${_userLocation?.longitude}';
-      showLoad = false;
-    });
+    if(_locationData != null){
+      List<geoloc.Placemark> placemarks = await geoloc.placemarkFromCoordinates(_locationData.latitude!, _locationData.longitude!);
+      setState(() {
+        _userLocation = _locationData;
+        lat = '${_userLocation?.latitude}';
+        lng = '${_userLocation?.longitude}';
+        alamat = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+        showLoad = false;
+      });
+    }
   }
 
   void _editProcess(XFile? imagePickedFile, String deskripsireport, String latitude, String longitude) async {

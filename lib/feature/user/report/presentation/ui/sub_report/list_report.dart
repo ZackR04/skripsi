@@ -49,6 +49,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
         child: _listItemReport != null ? ListView.builder(
           itemCount: _listItemReport!.length,
           itemBuilder: (context, int index){
+            final String _id = _listItemReport![index]['id'];
             final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemReport![index]['img']);
             final String _detailreport = _listItemReport![index]['deskripsi'];
             final String _tglpublish = _listItemReport![index]['tanggal_dibuat'];
@@ -63,6 +64,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
                 tglpublish: _tglpublish,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailReportScreen(
+                    id: _id,
                     gambar: _image,
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,
@@ -78,6 +80,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
                 rating: _rating,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailSelesaiScreen(
+                    id: _id,
                     gambar: _image,
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,

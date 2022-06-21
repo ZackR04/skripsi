@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 
 class DetailDitolakScreen extends StatefulWidget {
 
@@ -22,6 +23,29 @@ class DetailDitolakScreen extends StatefulWidget {
 }
 
 class _DetailDitolakScreenState extends State<DetailDitolakScreen> {
+
+  String alamat = '';
+  String lat = '';
+  String lng = '';
+  bool showLoad = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    lat = widget.latitude ?? '';
+    lng = widget.longitude ?? '';
+    _firstlocation(lat, lng);
+  }
+
+  void _firstlocation(String lat, String lng) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(double.parse(lat), double.parse(lng));
+    setState(() {
+      alamat = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+      showLoad = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,11 +111,7 @@ class _DetailDitolakScreenState extends State<DetailDitolakScreen> {
                         ),
                         Align(
                           alignment: Alignment.topLeft,
-                          child: Text("Latitude : ${widget.latitude}"),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text("Longitude : ${widget.longitude}"),
+                          child: Text(alamat),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 15),

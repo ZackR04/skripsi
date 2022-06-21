@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geocoding/geocoding.dart' as geoloc;
 
 class AddReportScreen extends StatefulWidget {
   const AddReportScreen({Key? key}) : super(key: key);
@@ -28,6 +29,8 @@ class _AddReportScreenState extends State<AddReportScreen> {
   Location location = Location();
   bool showLoad = false;
   String msg_error = '';
+  String alamat = '';
+
 
   @override
   void initState() {
@@ -130,7 +133,6 @@ class _AddReportScreenState extends State<AddReportScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 105,
               color: Colors.white,
               padding: EdgeInsets.only(left: 15, right: 20, top: 10),
               child: Column(
@@ -143,10 +145,10 @@ class _AddReportScreenState extends State<AddReportScreen> {
                     child: showLoad == true ? const CircularProgressIndicator() : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Latitude: ${_userLocation?.latitude ?? "-" }', style:
-                          TextStyle(fontSize: 15),),
-                        Text('Longitude: ${_userLocation?.longitude ?? "-" }', style:
-                          TextStyle(fontSize: 15),),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Text(alamat, style: TextStyle(fontSize: 17),),
                         MaterialButton(
                           onPressed: (){
                             _getLocation();
@@ -208,10 +210,14 @@ class _AddReportScreenState extends State<AddReportScreen> {
       showLoad = true;
     });
     final _locationData = await location.getLocation();
-    setState(() {
-      _userLocation = _locationData;
-      showLoad = false;
-    });
+    if(_locationData != null){
+      List<geoloc.Placemark> placemarks = await geoloc.placemarkFromCoordinates(_locationData.latitude!, _locationData.longitude!);
+      setState(() {
+        _userLocation = _locationData;
+        alamat = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+        showLoad = false;
+      });
+    }
   }
 
   void _addProcess(XFile? imagePickedFile, String date ,String detailReport, String latitude, String longitude) async {
