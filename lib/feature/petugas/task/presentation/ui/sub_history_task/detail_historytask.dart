@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +34,7 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
   var dio =  Dio();
   var _listDetailHistoryTask;
   var prefs;
+  String sublocation = '';
   String alamat = '';
   String lat = '';
   String lng = '';
@@ -193,6 +193,8 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
                     ),
                     GestureDetector(
                       onTap: () async {
+                        await _sublocation(_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lat'],
+                            _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lng']);
                         await showDialog(
                             context: context,
                             builder: (_) => historytaskDialog(
@@ -282,17 +284,18 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
         child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CarouselSlider(
-                  options: CarouselOptions(),
-                  items: [
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Center(
-                          child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
-                      ),
-                    )
-                  ]
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Center(
+                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
+                ),
               ),
+              // CarouselSlider(
+              //     options: CarouselOptions(),
+              //     items: [
+              //
+              //     ]
+              // ),
               Container(
                   padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 15),
                   child: Column(
@@ -327,11 +330,7 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
                       ),
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Text("Latitude : $latitude"),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text("Longitude : $longitude"),
+                        child: Text(sublocation),
                       ),
                     ],
                   )
@@ -339,6 +338,13 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
             ]),
       ),
     );
+  }
+
+  _sublocation(String latitude, String longitude) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(double.parse(latitude), double.parse(longitude));
+    setState(() {
+      sublocation = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+    });
   }
 
   // final List<Widget> imageSliders = imgList

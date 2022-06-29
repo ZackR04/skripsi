@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +33,7 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
   var _listDetailReport = [];
   var dio = Dio();
   var prefs;
+  String sublocation = '';
   String alamat = '';
   String lat = '';
   String lng = '';
@@ -107,7 +107,7 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                       children: [
                         Align(
                           alignment: Alignment.topLeft,
-                          child: Text('Tanggal Publish${widget.tglpublish!}', style: TextStyle(color: Colors.black38)),
+                          child: Text('Tanggal Publish ${widget.tglpublish!}', style: TextStyle(color: Colors.black38)),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 10),
@@ -196,6 +196,8 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                   ),
                   GestureDetector(
                     onTap: () async {
+                      await _sublocation(_listDetailReport[_listDetailReport.indexOf(e)]['lat'],
+                          _listDetailReport[_listDetailReport.indexOf(e)]['lng']);
                       await showDialog(
                           context: context,
                           builder: (_) => reportDialog(
@@ -268,16 +270,11 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
         child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CarouselSlider(
-                  options: CarouselOptions(),
-                  items: [
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Center(
-                          child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
-                      ),
-                    )
-                  ]
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Center(
+                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
+                ),
               ),
               Container(
                   padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 15),
@@ -313,11 +310,7 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                       ),
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Text("Latitude : $latitude"),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text("Longitude : $longitude"),
+                        child: Text(sublocation),
                       ),
                     ],
                   )
@@ -325,6 +318,13 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
             ]),
       ),
     );
+  }
+
+  _sublocation(String latitude, String longitude) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(double.parse(latitude), double.parse(longitude));
+    setState(() {
+      sublocation = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+    });
   }
 
   // final List<Widget> imageSliders = imgList

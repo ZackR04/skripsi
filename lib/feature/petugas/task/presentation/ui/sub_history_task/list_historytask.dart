@@ -69,7 +69,7 @@ class _HistoryTaskScreenState extends State<HistoryTaskScreen> {
             final String _tglpublish = _listItemHistoryTask![index]['tanggal_dibuat'];
             final String _latitude = _listItemHistoryTask![index]['lat'];
             final String _longitude = _listItemHistoryTask![index]['lng'];
-            final double _rating = _listItemHistoryTask![index]['rating'];
+            final double _rating = double.parse(_listItemHistoryTask![index]['rating']);
             return Padding(
               padding: EdgeInsets.only(top: 15),
               child: ItemHistoryTask(

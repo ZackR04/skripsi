@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skripsi_residencereport/feature/authentication/presentation/ui/login_screen.dart';
-import '../../../petugas/home_pet/presentation/ui/home_screen_pet.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -23,8 +22,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     "B",
     "C",
     "D",
-    "E",
-    "F",
   ];
   final List _listNoRumah = [
     "1",
@@ -34,13 +31,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     "5",
     "6",
     "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
   ];
-  final List _listNamaPerusahaan = [
-    "PT. Rapi Jaya",
-    "PT. Bersih Abadi",
-    "PT. Makmur",
-  ];
+  List<String> _listNamaPerusahaan = [];
 
+  var prefs;
   var dio = Dio();
   TextEditingController username = new TextEditingController();
   TextEditingController name = new TextEditingController();
@@ -48,6 +55,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController no_handphone = new TextEditingController();
   TextEditingController password = new TextEditingController();
   String msg_error = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getPrefs();
+  }
+
+  void _getPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    _getNamaPerusahaan();
+  }
+
+  void _getNamaPerusahaan() async {
+
+    var formData = FormData.fromMap({
+      'id_bidang': 'all',
+    });
+
+    final response = await dio.post(
+        'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiInfoContactService/get_info_contact_service',
+        data: formData
+    );
+    if(response.statusCode == 200){
+      final listData = await jsonDecode(response.data);
+      for(var i=0; i<listData.length; i++){
+        setState(() {
+          _listNamaPerusahaan.add('${listData[i]['nama_perusahaan']} - ${listData[i]['bidang']}');
+        });
+      }
+      print(_listNamaPerusahaan);
+    }else{
+      print('Failed');
+    }
+  }
 
   final GlobalKey<FormState> _formRegKey = GlobalKey<FormState>();
 
@@ -63,32 +105,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 70, left: 40, bottom: 10),
-                alignment: Alignment.topLeft,
-                child: Text('Masuk sebagai Penghuni Perumahan ?'),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 60, left: 20),
-                child: CupertinoSwitch(
-                  value: _switchValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _switchValue = value;
-                    });
-                  },
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(top: 70, left: 40, bottom: 10),
+                  alignment: Alignment.topLeft,
+                  child: Text('Masuk sebagai Penghuni Perumahan ?'),
                 ),
-              ),
-            ],
-          ),
-          _buildFormRegister(),
-        ],
-      )
+                Container(
+                  padding: EdgeInsets.only(top: 60, left: 20),
+                  child: CupertinoSwitch(
+                    value: _switchValue,
+                    onChanged: (value) {
+                      setState(() {
+                        _switchValue = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+            _buildFormRegister(),
+          ],
+        ) ,
+      ),
     );
   }
 
@@ -351,10 +394,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         DropdownButton(
           hint: const Text('Perusahaan'),
           value: _valPerusahaan,
-          items: _listNamaPerusahaan.map((value) {
-            return DropdownMenuItem(
-              child: Text(value),
+          items: _listNamaPerusahaan.map((String value) {
+            return DropdownMenuItem<String>(
               value: value,
+              child: Text(value),
             );
           }).toList(),
           onChanged: (value) {
@@ -362,7 +405,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _valPerusahaan = value.toString();
             });
           },
-        )
+        ),
       ],
     );
   }

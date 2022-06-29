@@ -79,7 +79,7 @@ class _ItemHistoryTaskState extends State<ItemHistoryTask> {
                       padding: EdgeInsets.only(top: 30),
                     ),
                     Align(
-                      alignment: Alignment.bottomLeft,
+                      alignment: Alignment.bottomRight,
                       child: Text(widget.tglpublish,
                         style: TextStyle(
                             fontSize: 15,

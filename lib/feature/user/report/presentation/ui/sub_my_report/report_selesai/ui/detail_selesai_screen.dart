@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
@@ -36,6 +34,7 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
   var dio = Dio();
   var _listReportSelesai = [];
   var prefs;
+  String sublocation = '';
   String alamat = '';
   String lat = '';
   String lng = '';
@@ -196,6 +195,8 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                     ),
                     GestureDetector(
                       onTap: () async {
+                        await _sublocation(_listReportSelesai[_listReportSelesai.indexOf(e)]['lat'],
+                            _listReportSelesai[_listReportSelesai.indexOf(e)]['lng']);
                         await showDialog(
                             context: context,
                             builder: (_) => reportSelesaiDialog(
@@ -286,16 +287,11 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
         child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CarouselSlider(
-                  options: CarouselOptions(),
-                  items: [
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Center(
-                          child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
-                      ),
-                    )
-                  ]
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Center(
+                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
+                ),
               ),
               Container(
                   padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 15),
@@ -331,11 +327,7 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                       ),
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Text("Latitude : $latitude"),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text("Longitude : $longitude"),
+                        child: Text(sublocation),
                       ),
                     ],
                   )
@@ -343,6 +335,13 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
             ]),
       ),
     );
+  }
+
+  _sublocation(String latitude, String longitude) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(double.parse(latitude), double.parse(longitude));
+    setState(() {
+      sublocation = '${placemarks.first.street} ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}, ${placemarks.first.postalCode}';
+    });
   }
 
   // final List<Widget> imageSliders = imgList

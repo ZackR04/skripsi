@@ -9,7 +9,13 @@ import 'package:location/location.dart';
 import 'package:geocoding/geocoding.dart' as geoloc;
 
 class UpdateTaskForm extends StatefulWidget {
-  const UpdateTaskForm({Key? key}) : super(key: key);
+
+  final String? idReport;
+  final String? idPetugas;
+
+  const UpdateTaskForm({Key? key,
+    this.idReport,
+    this.idPetugas}) : super(key: key);
 
   @override
   _UpdateTaskFormState createState() => _UpdateTaskFormState();
@@ -239,6 +245,8 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
     }
 
     var formData = FormData.fromMap({
+      'id_report': widget.idReport,
+      'id_petugas': widget.idPetugas,
       'tgl_update': date,
       'image_task': await MultipartFile.fromFile(imagePickedFile!.path, filename: 'upload.jpg'),
       'detail_update': detailTask,
@@ -263,7 +271,7 @@ class _UpdateTaskFormState extends State<UpdateTaskForm> {
             onConfirmBtnTap: (){}
         );
 
-        Navigator.pushReplacementNamed(context, '/detailtask');
+        Navigator.pushReplacementNamed(context, '/updatetask');
 
       }else{
         setState(() {
