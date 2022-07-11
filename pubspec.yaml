@@ -49,8 +49,9 @@ dependencies:
   intl: ^0.17.0
   carousel_slider: ^4.1.1
   cool_alert: ^1.1.0
-  geocoder2: ^1.1.2
+#  geocoder2: ^1.1.2
   geocoding: ^2.0.4
+  map_launcher: ^2.2.3
 
 dev_dependencies:
   flutter_test:

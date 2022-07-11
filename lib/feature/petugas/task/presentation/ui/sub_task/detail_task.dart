@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skripsi_residencereport/feature/petugas/task/presentation/ui/sub_task/update_task_form.dart';
 import 'package:geocoding/geocoding.dart';
@@ -101,7 +103,7 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                       decoration: BoxDecoration(
                           color: Colors.blue.shade200
                       ),
-                      padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                      padding: EdgeInsets.only(left: 20, right: 10, top: 10, bottom: 5),
                       child: Column(
                         children: [
                           Align(
@@ -136,11 +138,34 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                             alignment: Alignment.topLeft,
                             child: Text(alamat),
                           ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(),
+                              ),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                child: MaterialButton(
+                                  onPressed: () async {
+                                    final availableMaps = await MapLauncher.installedMaps;
+
+                                    await availableMaps.first.showMarker(
+                                      coords: Coords(double.parse(lat), double.parse(lng)),
+                                      title: alamat,
+                                    );
+                                  },
+                                  child:  Row(
+                                    children: [
+                                      Text("Go to Map", style: TextStyle(color: Colors.blueAccent),),
+                                      Icon(Icons.location_on_outlined, color: Colors.blueAccent,),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       )
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20),
                   ),
                   Expanded(
                       child: _listDetailTask.isEmpty ? Container() : buildStepper(context)
@@ -176,12 +201,14 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                   color: _index == _listDetailTask.indexOf(e) ? Colors.blue : Colors.grey,
                 ),
                 isActive: _index == _listDetailTask.indexOf(e),
-                title: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['tgl_update']}"),
+                title: Text("${DateFormat('dd MMM yyyy').format(DateTime.parse(_listDetailTask[_listDetailTask.indexOf(e)]['tgl_update']))}"),
                 content: Row(
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("${_listDetailTask[_listDetailTask.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
+                        child: Text(_listDetailTask[_listDetailTask.indexOf(e)]['detail_update'].length > 40 ? "${_listDetailTask[_listDetailTask.indexOf(e)]['detail_update'].substring(0, 40)}..."
+                            :
+                        "${_listDetailTask[_listDetailTask.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
                     ),
                     GestureDetector(
                       onTap: () async {

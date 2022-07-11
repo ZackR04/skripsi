@@ -19,28 +19,28 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.only(left: 30, right: 30, top: 20),
           child: Column(
             children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 50)),
               Image.asset('assets/logo.png'),
               Padding(
-                  padding: EdgeInsets.only(top: 50)),
-              Container(
+                  padding: EdgeInsets.only(top: 40)),
+              Expanded(
                 child: Row(
                   children: [
-                    IconButton(
-                      icon: Image.asset('assets/report.png'),
-                      iconSize: 150,
-                      onPressed: (){
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => MenuReportScreen())
-                        );
-                      },
+                    Container(
+                      alignment: Alignment.topCenter,
+                      child: IconButton(
+                        icon: Image.asset('assets/report.png'),
+                        iconSize: 150,
+                        onPressed: (){
+                          Navigator.push(
+                              context, MaterialPageRoute(builder: (context) => MenuReportScreen())
+                          );
+                        },
+                      ),
                     ),
                     Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: ListView(
                           children: [
+                            Padding(padding: EdgeInsets.only(top: 25)),
                             Text("Report",
                                 style: TextStyle(fontSize: 25)),
                             Padding(
@@ -49,23 +49,36 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(color: Colors.black54),
                               textAlign: TextAlign.start,),
                           ],
-                        )
+                        ),
+                        // Column(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        //     Text("Report",
+                        //         style: TextStyle(fontSize: 25)),
+                        //     Padding(
+                        //         padding: EdgeInsets.only(bottom: 10)),
+                        //     Text("Report adalah menu untuk mengirimkan report/laporan terkait kendala di perumahan kepada petugas perumahan",
+                        //       style: TextStyle(color: Colors.black54),
+                        //       textAlign: TextAlign.start,),
+                        //   ],
+                        // )
                     ),
                   ],
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.only(top: 30)),
-              Container(
+                padding: EdgeInsets.only(bottom: 30),
+              ),
+              Expanded(
                 child: Row(
                   children: [
                     Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: ListView(
                           children: [
+                            Padding(padding: EdgeInsets.only(top: 20)),
                             Text("Info Kontak Service",
-                                style: TextStyle(fontSize: 25),
+                              style: TextStyle(fontSize: 25),
                             ),
                             Padding(
                                 padding: EdgeInsets.only(bottom: 10)),
@@ -73,16 +86,33 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(color: Colors.black54),
                               textAlign: TextAlign.start,),
                           ],
-                        )
+                        ),
+                        // Column(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        //     Text("Info Kontak Service",
+                        //       style: TextStyle(fontSize: 25),
+                        //     ),
+                        //     Padding(
+                        //         padding: EdgeInsets.only(bottom: 10)),
+                        //     Text("Info Kontak Service adalah menu yang menampilkan kontak-kontak service perumahan yang berguna untuk penduduk",
+                        //       style: TextStyle(color: Colors.black54),
+                        //       textAlign: TextAlign.start,),
+                        //   ],
+                        // )
                     ),
-                    IconButton(
-                      icon: Image.asset('assets/cs.png'),
-                      iconSize: 150,
-                      onPressed: (){
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => MenuContactServiceScreen())
-                        );
-                      },
+                    Container(
+                      alignment: Alignment.topCenter,
+                      child: IconButton(
+                        icon: Image.asset('assets/cs.png'),
+                        iconSize: 150,
+                        onPressed: (){
+                          Navigator.push(
+                              context, MaterialPageRoute(builder: (context) => MenuContactServiceScreen())
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailSelesaiScreen extends StatefulWidget {
@@ -14,7 +16,7 @@ class DetailSelesaiScreen extends StatefulWidget {
   final String? latitude;
   final String? longitude;
   final String? id;
-  final double rating;
+  final double? rating;
 
   const DetailSelesaiScreen({Key? key,
     this.gambar,
@@ -23,7 +25,7 @@ class DetailSelesaiScreen extends StatefulWidget {
     this.latitude,
     this.longitude,
     this.id,
-    required this.rating,}) : super(key: key);
+    this.rating,}) : super(key: key);
 
   @override
   _DetailSelesaiScreenState createState() => _DetailSelesaiScreenState();
@@ -39,9 +41,12 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
   String lat = '';
   String lng = '';
   bool showLoad = false;
+  bool _showLoading = false;
+  String msg_error = '';
 
   StepperType _type = StepperType.vertical;
   int _index = 0;
+  double _value = 0;
 
   @override
   void initState() {
@@ -51,6 +56,9 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
     lat = widget.latitude ?? '';
     lng = widget.longitude ?? '';
     _firstlocation(lat, lng);
+    if(widget.rating != 0.0){
+      _value = widget.rating!;
+    }
   }
 
   void _firstlocation(String lat, String lng) async {
@@ -107,17 +115,31 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                     child: Column(
                       children: [
                         Center(
-                          child: RatingStars(
-                            value: widget.rating,
-                            starBuilder: (index, color) => Icon(
-                              Icons.star,
-                              color: color,
+                          child: Container(
+                            child: RatingStars(
+                              value: _value,
+                              starBuilder: (index, color) => Icon(
+                                Icons.star,
+                                color: color,
+                              ),
+                              starCount: 5,
+                              starSize: 40,
+                              starSpacing: 0,
+                              valueLabelVisibility: false,
+                              starColor: Colors.yellow,
+                              onValueChanged: (v) {
+                                if(widget.rating != 0.0){
+                                  setState(() {
+                                    _value = widget.rating!;
+                                  });
+                                }else{
+                                  setState(() {
+                                    _value = v;
+                                    _addProcess(_value);
+                                  });
+                                }
+                              }
                             ),
-                            starCount: 5,
-                            starSize: 40,
-                            starSpacing: 0,
-                            valueLabelVisibility: false,
-                            starColor: Colors.yellow,
                           ),
                         ),
                         Padding(
@@ -174,6 +196,47 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
     );
   }
 
+  void _addProcess(double v) async {
+    if(v == null){
+      setState(() {
+        _showLoading = false;
+        msg_error = "Rating tidak boleh kosong";
+      });
+    }else{
+      dio.options.headers = {
+        'Content-Type': 'application/form-data'
+      };
+      var formData = FormData.fromMap({
+        'id_report': widget.id,
+        'rating': v,
+      });
+
+      final response = await dio.post(
+          'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiReport/add_rating',
+          data: formData
+      );
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.data);
+        if (data['status_message'] == 'success') {
+          await CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,
+              text: '${data['message']}',
+              autoCloseDuration: const Duration(seconds: 10),
+              confirmBtnText: 'Ok!',
+              onConfirmBtnTap: (){}
+          );
+        }else{
+          setState(() {
+            _showLoading = false;
+            msg_error = "Maaf, system sedang error";
+          });
+        }
+      }
+    }
+  }
+
   Widget buildStepper(BuildContext context) {
     return EnhanceStepper(
         type: _type,
@@ -186,12 +249,14 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                   color: _index == _listReportSelesai.indexOf(e) ? Colors.blue : Colors.grey,
                 ),
                 isActive: _index == _listReportSelesai.indexOf(e),
-                title: Text("${_listReportSelesai[_listReportSelesai.indexOf(e)]['tgl_update']}"),
+                title: Text("${DateFormat('dd MMM yyyy').format(DateTime.parse(_listReportSelesai[_listReportSelesai.indexOf(e)]['tgl_update']))}"),
                 content: Row(
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("${_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
+                        child: Text(_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update'].length > 45 ? "${_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update'].substring(0, 45)}..."
+                            :
+                        "${_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
                     ),
                     GestureDetector(
                       onTap: () async {

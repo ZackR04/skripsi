@@ -45,17 +45,25 @@ class _MenuContactServiceScreenState extends State<MenuContactServiceScreen> {
         title: Text("Info Kontak Service"),
       ),
       body: SafeArea(
-        child: Container(
-            padding: EdgeInsets.only(left: 30, right: 30, top: 30),
-            child: ListView.builder(
-              itemCount: _listContactService.length,
-              itemBuilder: (context, int index){
-                return _itemContactService(
-                    _listContactService[index]['id'],
-                    _listContactService[index]['image'],
-                    _listContactService[index]['title']);
-              },
-            )
+        child: Column(
+          children: [
+            Image.asset('assets/cs.png',
+            height: 250),
+            Expanded(
+              child: Container(
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 30),
+                  child: ListView.builder(
+                    itemCount: _listContactService.length,
+                    itemBuilder: (context, int index){
+                      return _itemContactService(
+                          _listContactService[index]['id'],
+                          _listContactService[index]['image'],
+                          _listContactService[index]['title']);
+                    },
+                  )
+              ),
+            ),
+          ],
         ),
       ),
     );

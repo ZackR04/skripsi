@@ -18,22 +18,22 @@ class _MenuReportScreenState extends State<MenuReportScreen> {
     {
       'id' : 0,
       'title' : 'Step Pertama',
-      'deskripsi' : 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum'
+      'deskripsi' : 'Klik Icon + kemudian anda akan diarahkan ke halaman selanjutnya'
     },
     {
       'id' : 1,
       'title' : 'Step Kedua',
-      'deskripsi' : 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum'
+      'deskripsi' : 'Isi Form sesuai dengan masalah yang ingin anda report, kemudian klik tombol publish maka report anda akan segera kami tinjau'
     },
     {
       'id' : 2,
       'title' : 'Step Ketiga',
-      'deskripsi' : 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum'
+      'deskripsi' : 'Jika ditolak anda dapat melihat alasan terkait di Menu My Report => Ditolak'
     },
     {
       'id' : 3,
       'title' : 'Step Keempat',
-      'deskripsi' : 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum'
+      'deskripsi' : 'Jika diterima anda dapat melihat progresnya di Menu My Report => Diproses'
     }
   ];
 

@@ -191,13 +191,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  geocoder2:
-    dependency: "direct main"
-    description:
-      name: geocoder2
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.2"
   geocoding:
     dependency: "direct main"
     description:
@@ -310,6 +303,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  map_launcher:
+    dependency: "direct main"
+    description:
+      name: map_launcher
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.3"
   matcher:
     dependency: transitive
     description:

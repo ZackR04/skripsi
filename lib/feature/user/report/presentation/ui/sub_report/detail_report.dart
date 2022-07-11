@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:enhance_stepper/enhance_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailReportScreen extends StatefulWidget {
@@ -187,12 +188,14 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                 color: _index == _listDetailReport.indexOf(e) ? Colors.blue : Colors.grey,
               ),
               isActive: _index == _listDetailReport.indexOf(e),
-              title: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['tgl_update']}"),
+              title: Text("${DateFormat('dd MMM yyyy').format(DateTime.parse(_listDetailReport[_listDetailReport.indexOf(e)]['tgl_update']))}"),
               content: Row(
                 children: [
                   Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("${_listDetailReport[_listDetailReport.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
+                      child: Text(_listDetailReport[_listDetailReport.indexOf(e)]['detail_update'].length > 45 ? "${_listDetailReport[_listDetailReport.indexOf(e)]['detail_update'].substring(0, 45)}..."
+                          :
+                      "${_listDetailReport[_listDetailReport.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
                   ),
                   GestureDetector(
                     onTap: () async {

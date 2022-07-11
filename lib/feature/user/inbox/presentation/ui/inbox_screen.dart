@@ -31,7 +31,7 @@ class _InboxScreenState extends State<InboxScreen> {
   void _getDataPaket() async {
     var formData = FormData.fromMap({
       'id_user': prefs.getString('id'),
-      'status_pick': 0,
+      // 'status_pick': 0,
     });
     final response = await dio.post(
         'http://www.zafa-invitation.com/dashboard/backend-skripsi/index.php/rest_api/ApiPaket/get_inbox_paket',
@@ -54,7 +54,7 @@ class _InboxScreenState extends State<InboxScreen> {
       appBar: AppBar(
         title: Text("Inbox"),
       ),
-      body: _listPaketUser.isEmpty ? Container() :
+      body: _listPaketUser == null ? Container() :
       ListView.builder(
           itemCount: _listPaketUser!.length,
           itemBuilder: (context, int index){
@@ -119,6 +119,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                   _listPaketUser[index]['alamat'],
                                   _listPaketUser[index]['pengirim'],
                                   _listPaketUser[index]['jasa_pengiriman'],
+                                  _listPaketUser[index]['status_pick'],
                                 )
                             );
                           },
@@ -141,7 +142,7 @@ class _InboxScreenState extends State<InboxScreen> {
     return Text("Hai ${username}, paket anda dengan nomor resi ${noResi} telah sampai di pos kami. Silahkan ambil dan tunjukkan pesan ini kepada petugas kami. Terimakasih");
   }
 
-  Widget paketDialog(String noResi, String penerima, String noHp, String alamat, String pengirim, String jasaPengiriman) {
+  Widget paketDialog(String noResi, String penerima, String noHp, String alamat, String pengirim, String jasaPengiriman, String status) {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Column(
@@ -236,6 +237,19 @@ class _InboxScreenState extends State<InboxScreen> {
                         child: Text("${jasaPengiriman}",
                           style: TextStyle(color: Colors.blue, fontSize: 15),),
                       ),
+                      Padding(padding: EdgeInsets.only(top: 7),),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Status",
+                            style: TextStyle(fontSize: 15)),
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 5)),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: (status == '0')
+                            ? Text("Ready to Pick", style: TextStyle(color: Colors.blue))
+                            : Text("Picked", style: TextStyle(color: Colors.blue)),
+                      ),
                     ],
                   ),
                 ),
@@ -246,6 +260,4 @@ class _InboxScreenState extends State<InboxScreen> {
       ),
     );
   }
-
-
 }

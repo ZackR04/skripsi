@@ -176,6 +176,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemCount: _listItemDiproses!.length,
         itemBuilder: (context, index){
           print(index);
+          final String _id = _listItemDiproses![index]['id'];
           final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemDiproses![index]['img']);
           final String _detailreport = _listItemDiproses![index]['deskripsi'];
           final String _tglpublish = _listItemDiproses![index]['tanggal_dibuat'];
@@ -189,6 +190,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
                 tglpublish: _tglpublish,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailReportScreen(
+                    id: _id,
                     gambar: _image,
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,
@@ -211,6 +213,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
         itemCount: _listItemSelesai!.length,
         itemBuilder: (context, index){
           print(index);
+          final String _id = _listItemSelesai![index]['id'];
           final Image _image = Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_reports/'+_listItemSelesai![index]['img']);
           final String _detailreport = _listItemSelesai![index]['deskripsi'];
           final String _tglpublish = _listItemSelesai![index]['tanggal_dibuat'];
@@ -226,6 +229,7 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
                 rating: _rating,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailSelesaiScreen(
+                    id: _id,
                     gambar: _image,
                     deskripsireport: _detailreport,
                     tglpublish: _tglpublish,
