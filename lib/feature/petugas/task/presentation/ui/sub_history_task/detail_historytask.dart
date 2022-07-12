@@ -188,7 +188,7 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(_listDetailHistoryTask[index]['detail_update'].length > 45 ? "${_listDetailHistoryTask[index]['detail_update'].substring(0, 45)}..."
+                        child: Text(_listDetailHistoryTask[index]['detail_update'].length > 40 ? "${_listDetailHistoryTask[index]['detail_update'].substring(0, 40)}..."
                             : "${_listDetailHistoryTask[index]['detail_update']}. ", textAlign: TextAlign.left)
                     ),
                     GestureDetector(

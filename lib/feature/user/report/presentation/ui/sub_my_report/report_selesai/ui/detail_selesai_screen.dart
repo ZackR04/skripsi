@@ -254,7 +254,7 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update'].length > 45 ? "${_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update'].substring(0, 45)}..."
+                        child: Text(_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update'].length > 40 ? "${_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update'].substring(0, 40)}..."
                             :
                         "${_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
                     ),

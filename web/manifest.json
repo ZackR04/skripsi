@@ -1,11 +1,11 @@
 {
-    "name": "skripsi_residencereport",
-    "short_name": "skripsi_residencereport",
+    "name": "Residence Report",
+    "short_name": "Residene Report",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter application.",
+    "description": "Report Application for Residence",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

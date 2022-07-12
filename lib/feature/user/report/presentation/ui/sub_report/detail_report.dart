@@ -193,7 +193,7 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                 children: [
                   Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(_listDetailReport[_listDetailReport.indexOf(e)]['detail_update'].length > 45 ? "${_listDetailReport[_listDetailReport.indexOf(e)]['detail_update'].substring(0, 45)}..."
+                      child: Text(_listDetailReport[_listDetailReport.indexOf(e)]['detail_update'].length > 40 ? "${_listDetailReport[_listDetailReport.indexOf(e)]['detail_update'].substring(0, 40)}..."
                           :
                       "${_listDetailReport[_listDetailReport.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
                   ),
