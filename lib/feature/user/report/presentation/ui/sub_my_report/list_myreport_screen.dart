@@ -229,13 +229,14 @@ class _ListMyReportScreenState extends State<ListMyReportScreen> {
                 rating: _rating,
                 onclick: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DetailSelesaiScreen(
-                    id: _id,
-                    gambar: _image,
-                    deskripsireport: _detailreport,
-                    tglpublish: _tglpublish,
-                    latitude: _latitude,
-                    longitude: _longitude,
-                    rating: _rating,
+                      id: _id,
+                      gambar: _image,
+                      deskripsireport: _detailreport,
+                      tglpublish: _tglpublish,
+                      latitude: _latitude,
+                      longitude: _longitude,
+                      rating: _rating,
+                      isReportPublic: false
                   )));
                 },
               )

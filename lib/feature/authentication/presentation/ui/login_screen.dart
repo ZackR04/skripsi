@@ -31,7 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildFormLogin()
+      resizeToAvoidBottomInset: true,
+      body: _buildFormLogin(),
     );
   }
 
@@ -161,6 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
      if(response.statusCode == 200){
        var data = json.decode(response.data);
+       print('DATA LOGIN : $data');
        if(data['status_message'] == 'success'){
          if (data['accept'] == '0'){
            setState(() {

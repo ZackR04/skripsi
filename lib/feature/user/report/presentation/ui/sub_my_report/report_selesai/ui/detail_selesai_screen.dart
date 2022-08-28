@@ -17,6 +17,7 @@ class DetailSelesaiScreen extends StatefulWidget {
   final String? longitude;
   final String? id;
   final double? rating;
+  final bool isReportPublic;
 
   const DetailSelesaiScreen({Key? key,
     this.gambar,
@@ -25,7 +26,8 @@ class DetailSelesaiScreen extends StatefulWidget {
     this.latitude,
     this.longitude,
     this.id,
-    this.rating,}) : super(key: key);
+    this.rating,
+    required this.isReportPublic,}) : super(key: key);
 
   @override
   _DetailSelesaiScreenState createState() => _DetailSelesaiScreenState();
@@ -128,15 +130,17 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                               valueLabelVisibility: false,
                               starColor: Colors.yellow,
                               onValueChanged: (v) {
-                                if(widget.rating != 0.0){
-                                  setState(() {
-                                    _value = widget.rating!;
-                                  });
-                                }else{
-                                  setState(() {
-                                    _value = v;
-                                    _addProcess(_value);
-                                  });
+                                if(!widget.isReportPublic){
+                                  if(widget.rating != 0.0){
+                                    setState(() {
+                                      _value = widget.rating!;
+                                    });
+                                  }else{
+                                    setState(() {
+                                      _value = v;
+                                      _addProcess(_value);
+                                    });
+                                  }
                                 }
                               }
                             ),
@@ -185,8 +189,9 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 20),
                   ),
+                  _listReportSelesai.isEmpty ? Container() :
                   Expanded(
-                      child: _listReportSelesai.isEmpty ? Container() : buildStepper(context)
+                      child: buildStepper(context)
                   ),
                 ],
               )
@@ -242,43 +247,83 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
         type: _type,
         currentStep: _index,
         physics: ClampingScrollPhysics(),
-        steps: _listReportSelesai.map((e) =>
+        steps: [
+          for(var index=0; index<_listReportSelesai.length; index++)
             EnhanceStep(
                 icon: Icon(
-                  _index == _listReportSelesai.indexOf(e) ? Icons.check_circle_outline  : Icons.adjust_rounded,
-                  color: _index == _listReportSelesai.indexOf(e) ? Colors.blue : Colors.grey,
+                  _index == index ? Icons.check_circle_outline : Icons.adjust_rounded,
+                  color: _index == index ? Colors.blue : Colors.grey,
                 ),
-                isActive: _index == _listReportSelesai.indexOf(e),
-                title: Text("${DateFormat('dd MMM yyyy').format(DateTime.parse(_listReportSelesai[_listReportSelesai.indexOf(e)]['tgl_update']))}"),
+                isActive: _index == index,
+                title: Text(_listReportSelesai[index]['tgl_update']),
                 content: Row(
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update'].length > 40 ? "${_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update'].substring(0, 40)}..."
-                            :
-                        "${_listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
+                        child: Text(_listReportSelesai[index]['detail_update'].length > 35 ? "${_listReportSelesai[index]['detail_update'].substring(0, 35)}..."
+                            : "${_listReportSelesai[index]['detail_update']}. ", textAlign: TextAlign.left)
                     ),
                     GestureDetector(
                       onTap: () async {
-                        await _sublocation(_listReportSelesai[_listReportSelesai.indexOf(e)]['lat'],
-                            _listReportSelesai[_listReportSelesai.indexOf(e)]['lng']);
+                        await _sublocation(_listReportSelesai[index]['lat'],
+                            _listReportSelesai[index]['lng']);
                         await showDialog(
                             context: context,
                             builder: (_) => reportSelesaiDialog(
-                              _listReportSelesai[_listReportSelesai.indexOf(e)]['img'],
-                              _listReportSelesai[_listReportSelesai.indexOf(e)]['tgl_update'],
-                              _listReportSelesai[_listReportSelesai.indexOf(e)]['detail_update'],
-                              _listReportSelesai[_listReportSelesai.indexOf(e)]['lat'],
-                              _listReportSelesai[_listReportSelesai.indexOf(e)]['lng'],
+                              _listReportSelesai[index]['img'],
+                              _listReportSelesai[index]['tgl_update'],
+                              _listReportSelesai[index]['detail_update'],
+                              _listReportSelesai[index]['lat'],
+                              _listReportSelesai[index]['lng'],
                             )
                         );
                       },
-                      child: Text("See Details", style: TextStyle(color: Colors.blue),),
+                      child: const Text("See Details", style: TextStyle(color: Colors.blue),),
                     )
                   ],
                 )
             )
-        ).toList(),
+        ],
+
+
+        // _listDetailHistoryTask.map((e) =>
+        //     EnhanceStep(
+        //         icon: Icon(
+        //           _index == _listDetailHistoryTask.indexOf(e) ? Icons.check_circle_outline : Icons.adjust_rounded,
+        //           color: _index == _listDetailHistoryTask.indexOf(e) ? Colors.blue : Colors.grey,
+        //         ),
+        //         isActive: _index == _listDetailHistoryTask.indexOf(e),
+        //         title: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['tgl_update']}"),
+        //         content: Row(
+        //           children: [
+        //             Align(
+        //                 alignment: Alignment.centerLeft,
+        //                 child: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
+        //             ),
+        //             GestureDetector(
+        //               onTap: () async {
+        //                 await _sublocation(_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lat'],
+        //                     _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lng']);
+        //                 await showDialog(
+        //                     context: context,
+        //                     builder: (_) => historytaskDialog(
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['img'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['tgl_update'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['detail_update'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lat'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lng'],
+        //                     )
+        //                 );
+        //               },
+        //               child: Text("See Details", style: TextStyle(color: Colors.blue),),
+        //             )
+        //           ],
+        //         )
+        //     )
+        // ).toList(),
+
+
+
         // onStepCancel: () {
         //   back();
         // },
@@ -292,14 +337,13 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
         },
         controlsBuilder: (BuildContext context, ControlsDetails details) {
           return Container();
-          //   Container(
           //   padding: EdgeInsets.only(top: 30),
           //   child: Row(
           //     children: [
           //       SizedBox(
           //         height: 30,
           //       ),
-          //       _index < _listReportSelesai.length-1
+          //       _index < _listDetailHistoryTask.length-1
           //           ?
           //       TextButton(
           //         onPressed: details.onStepContinue,
@@ -319,7 +363,7 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
           //       ),
           //     ],
           //   ),
-          // )
+          // );
         });
   }
 
@@ -355,7 +399,7 @@ class _DetailSelesaiScreenState extends State<DetailSelesaiScreen> {
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: Center(
-                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
+                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 700)
                 ),
               ),
               Container(

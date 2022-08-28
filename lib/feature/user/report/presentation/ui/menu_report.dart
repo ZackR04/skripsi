@@ -136,7 +136,7 @@ class _MenuReportScreenState extends State<MenuReportScreen> {
                               _listKeteranganReport[1]['title'],
                               _listKeteranganReport[1]['deskripsi']
                           )),
-                      Padding(padding: EdgeInsets.only(right: 40))
+                      Padding(padding: EdgeInsets.only(right: 30))
                     ],
                   ),
                 ),

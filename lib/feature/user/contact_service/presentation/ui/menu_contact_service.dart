@@ -47,8 +47,7 @@ class _MenuContactServiceScreenState extends State<MenuContactServiceScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Image.asset('assets/cs.png',
-            height: 250),
+            Image.asset('assets/cs.png', fit: BoxFit.fill,),
             Expanded(
               child: Container(
                   padding: EdgeInsets.only(left: 30, right: 30, top: 30),

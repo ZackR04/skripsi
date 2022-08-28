@@ -167,8 +167,9 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                         ],
                       )
                   ),
+                  _listDetailTask.isEmpty ? Container() :
                   Expanded(
-                      child: _listDetailTask.isEmpty ? Container() : buildStepper(context)
+                      child: buildStepper(context)
                   ),
                 ],
               )
@@ -194,47 +195,87 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
         type: _type,
         currentStep: _index,
         physics: ClampingScrollPhysics(),
-        steps: _listDetailTask.map((e) =>
+        steps: [
+          for(var index=0; index<_listDetailTask.length; index++)
             EnhanceStep(
                 icon: Icon(
-                  _index == _listDetailTask.indexOf(e) ? Icons.check_circle_outline : Icons.adjust_rounded,
-                  color: _index == _listDetailTask.indexOf(e) ? Colors.blue : Colors.grey,
+                  _index == index ? Icons.check_circle_outline : Icons.adjust_rounded,
+                  color: _index == index ? Colors.blue : Colors.grey,
                 ),
-                isActive: _index == _listDetailTask.indexOf(e),
-                title: Text("${DateFormat('dd MMM yyyy').format(DateTime.parse(_listDetailTask[_listDetailTask.indexOf(e)]['tgl_update']))}"),
+                isActive: _index == index,
+                title: Text(_listDetailTask[index]['tgl_update']),
                 content: Row(
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(_listDetailTask[_listDetailTask.indexOf(e)]['detail_update'].length > 40 ? "${_listDetailTask[_listDetailTask.indexOf(e)]['detail_update'].substring(0, 40)}..."
-                            :
-                        "${_listDetailTask[_listDetailTask.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
+                        child: Text(_listDetailTask[index]['detail_update'].length > 35 ? "${_listDetailTask[index]['detail_update'].substring(0, 35)}..."
+                            : "${_listDetailTask[index]['detail_update']}. ", textAlign: TextAlign.left)
                     ),
                     GestureDetector(
                       onTap: () async {
-                        await _sublocation(_listDetailTask[_listDetailTask.indexOf(e)]['lat'],
-                            _listDetailTask[_listDetailTask.indexOf(e)]['lng']);
+                        await _sublocation(_listDetailTask[index]['lat'],
+                            _listDetailTask[index]['lng']);
                         await showDialog(
                             context: context,
                             builder: (_) => taskDialog(
-                          _listDetailTask[_listDetailTask.indexOf(e)]['img'],
-                          _listDetailTask[_listDetailTask.indexOf(e)]['tgl_update'],
-                          _listDetailTask[_listDetailTask.indexOf(e)]['detail_update'],
-                          _listDetailTask[_listDetailTask.indexOf(e)]['lat'],
-                          _listDetailTask[_listDetailTask.indexOf(e)]['lng'])
+                              _listDetailTask[index]['img'],
+                              _listDetailTask[index]['tgl_update'],
+                              _listDetailTask[index]['detail_update'],
+                              _listDetailTask[index]['lat'],
+                              _listDetailTask[index]['lng'],
+                            )
                         );
                       },
-                      child: Text("See Details", style: TextStyle(color: Colors.blue),),
+                      child: const Text("See Details", style: TextStyle(color: Colors.blue),),
                     )
                   ],
                 )
             )
-        ).toList(),
+        ],
+
+
+        // _listDetailHistoryTask.map((e) =>
+        //     EnhanceStep(
+        //         icon: Icon(
+        //           _index == _listDetailHistoryTask.indexOf(e) ? Icons.check_circle_outline : Icons.adjust_rounded,
+        //           color: _index == _listDetailHistoryTask.indexOf(e) ? Colors.blue : Colors.grey,
+        //         ),
+        //         isActive: _index == _listDetailHistoryTask.indexOf(e),
+        //         title: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['tgl_update']}"),
+        //         content: Row(
+        //           children: [
+        //             Align(
+        //                 alignment: Alignment.centerLeft,
+        //                 child: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
+        //             ),
+        //             GestureDetector(
+        //               onTap: () async {
+        //                 await _sublocation(_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lat'],
+        //                     _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lng']);
+        //                 await showDialog(
+        //                     context: context,
+        //                     builder: (_) => historytaskDialog(
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['img'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['tgl_update'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['detail_update'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lat'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lng'],
+        //                     )
+        //                 );
+        //               },
+        //               child: Text("See Details", style: TextStyle(color: Colors.blue),),
+        //             )
+        //           ],
+        //         )
+        //     )
+        // ).toList(),
+
+
+
         // onStepCancel: () {
         //   back();
         // },
         // onStepContinue: () {
-        //
         //   next();
         // },
         onStepTapped: (index) {
@@ -244,14 +285,13 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
         },
         controlsBuilder: (BuildContext context, ControlsDetails details) {
           return Container();
-          //   Container(
           //   padding: EdgeInsets.only(top: 30),
           //   child: Row(
           //     children: [
           //       SizedBox(
           //         height: 30,
           //       ),
-          //       _index < _listDetailTask.length-1
+          //       _index < _listDetailHistoryTask.length-1
           //           ?
           //       TextButton(
           //         onPressed: details.onStepContinue,
@@ -272,8 +312,7 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
           //     ],
           //   ),
           // );
-        }
-        );
+        });
   }
 
   // void back() {
@@ -308,7 +347,7 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: Center(
-                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
+                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 700)
                 ),
               ),
               Container(

@@ -33,7 +33,7 @@ class DetailHistoryTask extends StatefulWidget {
 class _DetailHistoryTaskState extends State<DetailHistoryTask> {
 
   var dio =  Dio();
-  var _listDetailHistoryTask;
+  var _listDetailHistoryTask = [];
   var prefs;
   String sublocation = '';
   String alamat = '';
@@ -86,6 +86,7 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
 
   @override
   Widget build(BuildContext context) {
+    print('NJIR LAH : ${_listDetailHistoryTask.length}');
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -159,8 +160,9 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
                         ],
                       )
                   ),
+                  _listDetailHistoryTask.isEmpty ? Container() :
                   Expanded(
-                      child: _listDetailHistoryTask == null ? Container() : buildStepper(context)
+                      child: buildStepper(context)
                   ),
                 ],
               )
@@ -183,12 +185,12 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
                   color: _index == index ? Colors.blue : Colors.grey,
                 ),
                 isActive: _index == index,
-                title: Text("${DateFormat('dd MMM yyyy').format(DateTime.parse(_listDetailHistoryTask[index]['tgl_update']))}"),
+                title: Text(_listDetailHistoryTask[index]['tgl_update']),
                 content: Row(
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(_listDetailHistoryTask[index]['detail_update'].length > 40 ? "${_listDetailHistoryTask[index]['detail_update'].substring(0, 40)}..."
+                        child: Text(_listDetailHistoryTask[index]['detail_update'].length > 35 ? "${_listDetailHistoryTask[index]['detail_update'].substring(0, 35)}..."
                             : "${_listDetailHistoryTask[index]['detail_update']}. ", textAlign: TextAlign.left)
                     ),
                     GestureDetector(
@@ -327,7 +329,7 @@ class _DetailHistoryTaskState extends State<DetailHistoryTask> {
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: Center(
-                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
+                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 700)
                 ),
               ),
               // CarouselSlider(

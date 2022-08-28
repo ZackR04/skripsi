@@ -146,8 +146,9 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 20),
                   ),
+                  _listDetailReport.isEmpty ? Container() :
                   Expanded(
-                    child: _listDetailReport.isEmpty ? Container() : buildStepper(context)
+                    child: buildStepper(context)
                   ),
                 ],
               )
@@ -181,43 +182,83 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
         type: _type,
         currentStep: _index,
         physics: ClampingScrollPhysics(),
-        steps: _listDetailReport.map((e) =>
+        steps: [
+          for(var index=0; index<_listDetailReport.length; index++)
             EnhanceStep(
-              icon: Icon(
-                _index == _listDetailReport.indexOf(e) ? Icons.check_circle_outline : Icons.adjust_rounded,
-                color: _index == _listDetailReport.indexOf(e) ? Colors.blue : Colors.grey,
-              ),
-              isActive: _index == _listDetailReport.indexOf(e),
-              title: Text("${DateFormat('dd MMM yyyy').format(DateTime.parse(_listDetailReport[_listDetailReport.indexOf(e)]['tgl_update']))}"),
-              content: Row(
-                children: [
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(_listDetailReport[_listDetailReport.indexOf(e)]['detail_update'].length > 40 ? "${_listDetailReport[_listDetailReport.indexOf(e)]['detail_update'].substring(0, 40)}..."
-                          :
-                      "${_listDetailReport[_listDetailReport.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      await _sublocation(_listDetailReport[_listDetailReport.indexOf(e)]['lat'],
-                          _listDetailReport[_listDetailReport.indexOf(e)]['lng']);
-                      await showDialog(
-                          context: context,
-                          builder: (_) => reportDialog(
-                              _listDetailReport[_listDetailReport.indexOf(e)]['img'],
-                              _listDetailReport[_listDetailReport.indexOf(e)]['tgl_update'],
-                              _listDetailReport[_listDetailReport.indexOf(e)]['detail_update'],
-                              _listDetailReport[_listDetailReport.indexOf(e)]['lat'],
-                              _listDetailReport[_listDetailReport.indexOf(e)]['lng']
-                          )
-                      );
-                    },
-                    child: Text("See Details", style: TextStyle(color: Colors.blue),),
-                  )
-                ],
-              )
+                icon: Icon(
+                  _index == index ? Icons.check_circle_outline : Icons.adjust_rounded,
+                  color: _index == index ? Colors.blue : Colors.grey,
+                ),
+                isActive: _index == index,
+                title: Text(_listDetailReport[index]['tgl_update']),
+                content: Row(
+                  children: [
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(_listDetailReport[index]['detail_update'].length > 35 ? "${_listDetailReport[index]['detail_update'].substring(0, 35)}..."
+                            : "${_listDetailReport[index]['detail_update']}. ", textAlign: TextAlign.left)
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await _sublocation(_listDetailReport[index]['lat'],
+                            _listDetailReport[index]['lng']);
+                        await showDialog(
+                            context: context,
+                            builder: (_) => reportDialog(
+                              _listDetailReport[index]['img'],
+                              _listDetailReport[index]['tgl_update'],
+                              _listDetailReport[index]['detail_update'],
+                              _listDetailReport[index]['lat'],
+                              _listDetailReport[index]['lng'],
+                            )
+                        );
+                      },
+                      child: const Text("See Details", style: TextStyle(color: Colors.blue),),
+                    )
+                  ],
+                )
             )
-        ).toList(),
+        ],
+
+
+        // _listDetailHistoryTask.map((e) =>
+        //     EnhanceStep(
+        //         icon: Icon(
+        //           _index == _listDetailHistoryTask.indexOf(e) ? Icons.check_circle_outline : Icons.adjust_rounded,
+        //           color: _index == _listDetailHistoryTask.indexOf(e) ? Colors.blue : Colors.grey,
+        //         ),
+        //         isActive: _index == _listDetailHistoryTask.indexOf(e),
+        //         title: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['tgl_update']}"),
+        //         content: Row(
+        //           children: [
+        //             Align(
+        //                 alignment: Alignment.centerLeft,
+        //                 child: Text("${_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['detail_update']}. ", textAlign: TextAlign.left)
+        //             ),
+        //             GestureDetector(
+        //               onTap: () async {
+        //                 await _sublocation(_listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lat'],
+        //                     _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lng']);
+        //                 await showDialog(
+        //                     context: context,
+        //                     builder: (_) => historytaskDialog(
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['img'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['tgl_update'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['detail_update'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lat'],
+        //                       _listDetailHistoryTask[_listDetailHistoryTask.indexOf(e)]['lng'],
+        //                     )
+        //                 );
+        //               },
+        //               child: Text("See Details", style: TextStyle(color: Colors.blue),),
+        //             )
+        //           ],
+        //         )
+        //     )
+        // ).toList(),
+
+
+
         // onStepCancel: () {
         //   back();
         // },
@@ -231,14 +272,13 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
         },
         controlsBuilder: (BuildContext context, ControlsDetails details) {
           return Container();
-          //   Container(
           //   padding: EdgeInsets.only(top: 30),
           //   child: Row(
           //     children: [
           //       SizedBox(
           //         height: 30,
           //       ),
-          //       _index < _listDetailReport.length-1
+          //       _index < _listDetailHistoryTask.length-1
           //           ?
           //       TextButton(
           //         onPressed: details.onStepContinue,
@@ -276,7 +316,7 @@ class _DetailReportScreenState extends State<DetailReportScreen> {
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: Center(
-                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 900)
+                    child: Image.network('http://www.zafa-invitation.com/dashboard/backend-skripsi/assets/img_tasks/$img', fit: BoxFit.cover, width: 700)
                 ),
               ),
               Container(
